@@ -1,0 +1,5 @@
+:root {
+	--site-font: Roboto, sans-serif;
+
+	--transition-art: cubic-bezier(.215,.665,.11,.9);
+}

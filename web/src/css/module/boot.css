@@ -1,0 +1,14 @@
+.boot {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: #313131;
+	color: #fff;
+	font-family: 'Hack', monsopace;
+
+	& .boot--scroller {
+		position: absolute;
+		bottom: 10px;
+		left: 10px;
+	}
+}

@@ -1,0 +1,23 @@
+{
+  "name": "SimpleOS",
+  "version": "0.0.1",
+  "description": "",
+  "author": "Philipp Heidrich",
+  "author_mail": "phi.heidrich@gmail.com",
+  "devDependencies": {
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-copy": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-include-replace": "*",
+    "grunt-postcss": "^0.8.0",
+    "grunt-text-replace": "*",
+    "load-grunt-tasks": "*",
+    "material-design-icons": "*",
+
+	"postcss-import": "*",
+    "postcss-cssnext": "2.7.0",
+	"pixrem": "3.0.2",
+	"cssnano": "3.7.4",
+	"autoprefixer": "6.5.0"
+  }
+}

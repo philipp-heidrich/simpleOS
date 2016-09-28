@@ -1,0 +1,86 @@
+/**
+ *	Default tags
+ */
+button,
+input[type='submit'] {
+	border: 0;
+	text-align: center;
+	padding: 10px;
+	min-width: 70px;
+	display: inline-block;
+	font-size: .9rem;
+	font-weight: 700;
+	color: #3e3e3e;
+	background-color: #d8d8d8;
+	cursor: default;
+	transition: .4s var(--transition-art);
+	
+	&:hover {
+		background-color: #b9b9b9;
+	}
+
+	&.btn--color {
+		color: #ebfaff;
+		background-color: var(--color-main);
+
+		&:hover {
+			background-color: var(--color-main-hover);
+		}
+	}
+}
+
+input[type='text'],
+input[type='mail'],
+input[type='password'],
+input[type='number'] {
+	padding: 10px;
+	width: 100%;
+	max-width: 300px;
+}
+
+input[type='checkbox'] {
+	border: 0;
+}
+
+
+
+/**
+ *	Special form elements
+ */
+.formblock {
+	margin: 5px 0;
+
+	& label {
+		margin: 0;
+		display: block;
+		font-size: .8rem;
+	}
+
+	& input {
+		margin: 0;
+	}
+}
+
+
+.formclick {
+	position: relative;
+	padding-left: 23px;
+
+	& input {
+		position: absolute;
+		left: 2px;
+		top: 4px;
+	}
+}
+
+
+.btn-area {
+	margin-top: 30px;
+	text-align: right;
+
+	&:after {
+		content: '';
+		display: block;
+		clear: both;
+	}
+}

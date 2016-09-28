@@ -1,0 +1,39 @@
+.register {
+	background-color: var(--color-main);
+	transition: 1s var(--transition-art);
+	opacity: 0;
+	color: #fff;
+
+	&.register--show {
+		opacity: 1;
+	}
+
+	& .register__content {
+		width: 100%;
+		margin: 100px auto 0;
+		max-width: 600px;
+	}
+
+	& .register__block {
+		margin: 10px 0 30px;
+
+		&:after {
+			content: '';
+			display: block;
+			clear: both;
+		}
+
+		&.register__block--pwd {
+			margin-top: 50px;
+		}
+	}
+
+	& .register__heading {
+		font-weight: 100;
+		font-size: 2.3rem;
+	}
+
+	& .register__welcomeTxt {
+		margin-bottom: 40px;
+	}
+}
