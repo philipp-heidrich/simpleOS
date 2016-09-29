@@ -25,11 +25,11 @@
 			// Check is this the first visit
 			if(boot.check_isFirstVisit())
 			{
-				setTimeout(register.init, 500);
+				// setTimeout(register.init, 500);
 			}
 			else
 			{
-				setTimeout(login.init, 500);
+				// setTimeout(login.init, 500);
 			}
 		});
 	}
@@ -42,7 +42,7 @@
 	{
 		boot.obj = {
 			content: document.querySelector('#wrapper .boot'),
-			scroller: document.querySelector('.boot .boot--scroller')
+			scroller: document.querySelector('.boot .boot__scroller')
 		}
 	}
 
