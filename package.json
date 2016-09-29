@@ -1,9 +1,14 @@
 {
   "name": "SimpleOS",
   "version": "0.0.1",
-  "description": "",
+  "description": "A simple operating system build in javascript",
+  "license": "MIT",
   "author": "Philipp Heidrich",
   "author_mail": "phi.heidrich@gmail.com",
+  "repository": {
+	"type": "git",
+	"url": "https://github.com/philipp-heidrich/simpleOS"
+  },
   "devDependencies": {
     "grunt-contrib-concat": "*",
     "grunt-contrib-copy": "*",
