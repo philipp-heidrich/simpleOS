@@ -2,4 +2,16 @@
 	--site-font: Roboto, sans-serif;
 
 	--transition-art: cubic-bezier(.215,.665,.11,.9);
+
+	/* Breakpoints */
+	@custom-media --xsmall (max-width: 200px);
+	@custom-media --small (max-width: 600px);
+	@custom-media --medium (min-width: 601px) and (max-width: 780px);
+	@custom-media --large (min-width: 781px) and (max-width: 99999999px);
+
+	/* Breakpoints UP */
+	@custom-media --small-up (width > 1px);
+	@custom-media --medium-up (width > 480px);
+	@custom-media --large-up (width > 780px);
+	@custom-media --xlarge-up (width > 1080px);
 }
