@@ -196,8 +196,6 @@
 	 */
 	function goLogin()
 	{
-		console.log(login.currentUser.id);
-
 		class_user.saveCurrentUser(login.currentUser.id);
 
 		// Show desktop

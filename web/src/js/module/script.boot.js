@@ -26,11 +26,11 @@
 			// Check is this the first visit
 			if(os.getFirstPcVisit())
 			{
-				// setTimeout(register.init, 500);
+				setTimeout(register.init, 500);
 			}
 			else
 			{
-				// setTimeout(login.init, 500);
+				setTimeout(login.init, 500);
 			}
 		});
 	}
