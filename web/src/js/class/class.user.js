@@ -37,7 +37,7 @@
 		// Hash pwd
 		if(pwd)
 		{
-			userObj = hashpwd(pwd);
+			userObj.pwd = hashpwd(pwd);
 		}
 
 		// Load account array
@@ -63,12 +63,36 @@
 
 
 	/**
+	 *	Get this user
+	 */
+	class_user.getUser = function(userId)
+	{
+		var allUsers = option.load('account_users');
+
+		if(allUsers[userId])
+		{
+			return allUsers[userId];
+		}
+		else {
+			return false;
+		}
+	}
+
+
+	/**
 	 *	Get length of users
 	 */
 	class_user.getUserLength = function()
 	{
-		var users = option.load('account_users');
-		return users.length;
+		var users = option.load('account_users'),
+			userLength = 0;
+
+		for(var _user in users)
+		{
+			userLength++;
+		}
+
+		return userLength;
 	}
 
 
@@ -94,10 +118,9 @@
 	/**
 	 *	Check right pwd
 	 */
-	class_user.checkPwd = function(pwd, pwdhash)
+	class_user.comparePwd = function(pwd, pwdhash)
 	{
 		var newPwdHash = hashpwd(pwd);
-
 		if(newPwdHash == pwdhash)
 		{
 			return true;
@@ -107,6 +130,25 @@
 			return false;
 		}
 	}
+
+
+	/**
+	 *	Set login user
+	 */
+	class_user.setLoginUser = function(userId)
+	{
+		option.save('account_login', userId);
+	}
+
+
+	/**
+	 *	Remove login user
+	 */
+	class_user.removeLoginUser = function()
+	{
+		option.save('account_login', false);
+	}
+
 
 
 

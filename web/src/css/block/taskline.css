@@ -12,11 +12,42 @@
 		top: 0;
 		width: 44px;
 		height: 100%;
+		opacity: .7;
 		background-color: transparent;
 		transition: background-color .3s var(--transition-art);
 
 		&:hover {
+			opacity: 1;
 			background-color: rgba(0, 0, 0, .2);
 		}
+
+		& .taskline__startBackground {
+			width: 80%;
+			height: 80%;
+			position: absolute;
+			left: 10%;
+			top: 10%;
+			background-size: cover;
+			background-image: url(../gfx/logo.png);
+		}
+	}
+
+	& .taskline__time {
+		float: right;
+		min-width: 120px;
+		height: 100%;
+		color: #fff;
+		text-align: center;
+		background-color: rgba(0, 0, 0, .05);
+	}
+
+	& .taskline__timeday {
+		font-size: 1rem;
+		margin-top: 5px;
+	}
+
+	& .taskline__date {
+		font-size: .8rem;
+		line-height: 15px;
 	}
 }

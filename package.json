@@ -1,7 +1,7 @@
 {
   "name": "webOS",
   "version": "0.0.3",
-  "description": "A simple operating system build in javascript",
+  "description": "A simple operating system build in native javascript",
   "license": "MIT",
   "author": "Philipp Heidrich",
   "author_mail": "phi.heidrich@gmail.com",

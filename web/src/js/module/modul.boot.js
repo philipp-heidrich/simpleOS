@@ -17,7 +17,8 @@
 		boot.loader([
 			register.boot,
 			login.boot,
-			desktop.boot
+			desktop.boot,
+			taskline.boot
 		],
 
 		// Run Callback

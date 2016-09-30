@@ -34,6 +34,9 @@
 
 		// Ausgabe
 		msg.printMsg(this);
+
+		// Add Event
+		addEvents();
 	}
 
 
@@ -342,6 +345,34 @@
 				msgObj.option.callback(msgObj);
 			}
 		}, 100);
+	}
+
+
+	/**
+	 *	Add events
+	 */
+	function addEvents()
+	{
+		function closeMsg(event)
+		{
+			// Press [Enter]
+			if(event.keyCode == 13)
+			{
+				// Close msg box
+				msg.close();
+
+				// Stoppe event listener
+				event.preventDefault();
+
+				// Remove event listener
+				window.removeEventListener('keypress', closeMsg, false);
+			}
+			else {
+				event.preventDefault();
+			}
+		}
+
+		window.addEventListener('keypress', closeMsg);
 	}
 
 

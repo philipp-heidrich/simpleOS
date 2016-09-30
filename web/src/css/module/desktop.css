@@ -1,3 +1,18 @@
 .desktop {
-	background-color: #fff;
+	& .taskline {
+		z-index: 2;
+	}
+
+	& .desktop__background {
+		z-index: 1;
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		/*background-color: var(--color-main);
+		background-size: cover;
+		background-position: center;
+		background-image: url(../gfx/background/29934789216_79d0b9cd85_k.jpg);*/
+	}
 }
