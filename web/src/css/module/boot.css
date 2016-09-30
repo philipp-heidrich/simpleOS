@@ -20,7 +20,7 @@
 		height: 100%;
 		z-index: 1;
 		opacity: .1;
-		background-image: url(../gfx/logo_grey.png);
+		background-image: url(../gfx/logo.png);
 		background-repeat: no-repeat;
 		background-position: center;
 	}
