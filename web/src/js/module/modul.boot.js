@@ -18,7 +18,8 @@
 			register.boot,
 			login.boot,
 			desktop.boot,
-			taskline.boot
+			taskline.boot,
+			startobj.boot
 		],
 
 		// Run Callback

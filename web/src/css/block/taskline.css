@@ -13,22 +13,15 @@
 		width: 44px;
 		height: 100%;
 		opacity: .7;
+		line-height: 57px;
+		color: #6f6f6f;
 		background-color: transparent;
-		transition: background-color .3s var(--transition-art);
+		transition: .3s var(--transition-art);
 
 		&:hover {
+			color: var(--color-main);
 			opacity: 1;
-			background-color: rgba(0, 0, 0, .2);
-		}
-
-		& .taskline__startBackground {
-			width: 80%;
-			height: 80%;
-			position: absolute;
-			left: 10%;
-			top: 10%;
-			background-size: cover;
-			background-image: url(../gfx/logo.png);
+			background-color: rgba(0, 0, 0, .4);
 		}
 	}
 

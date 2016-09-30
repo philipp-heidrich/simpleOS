@@ -1,0 +1,49 @@
+.startobj {
+	position: absolute;
+	z-index: 2;
+	left: 5px;
+	opacity: 0;
+	bottom: 49px;
+	background-color: var(--color-main);
+	color: #fff;
+	transition: .5s var(--transition-art);
+
+	&.startobj--active {
+		opacity: 1;
+	}
+
+	& .startobj__content {
+		padding: 10px;
+	}
+
+	& .startobj__header {
+		font-size: 1.2rem;
+		font-weight: 100;
+		margin: 10px 10px 7px;
+		text-transform: uppercase;
+	}
+
+	& .startobj__list {
+		min-width: 170px;
+
+		& > li {
+			position: relative;
+			width: 100%;
+			line-height: 40px;
+			padding: 0 10px 0 44px;
+			transition: .5s var(--transition-art);
+
+			&:hover {
+				background-color: var(--color-main-hover);
+			}
+		}
+	}
+
+	& .startobj__listIcon {
+		position: absolute;
+		left: 4px;
+		top: 4px;
+		width: 40px;
+		height: 40px;
+	}
+}

@@ -51,5 +51,4 @@
 		option.save('os_name', name);
 	}
 
-
 }).call(this);

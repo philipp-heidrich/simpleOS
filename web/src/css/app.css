@@ -27,4 +27,5 @@
 
 /* @import blocks
 ---------------------------------------------------------------*/
-@import 'block/taskline.css'
+@import 'block/startobj.css';
+@import 'block/taskline.css';
