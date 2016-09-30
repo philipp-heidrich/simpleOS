@@ -125,7 +125,8 @@ module.exports = function(grunt)
                 src: [
                     '**/*.html',
                     '!widget/**/*.html',
-                    '!layout/**/*.html'
+                    '!layout/**/*.html',
+					'!module/**/*.html'
                 ],
                 dest: path.build.debug + '/',
                 cwd: path.html
