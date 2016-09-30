@@ -109,7 +109,7 @@
 			closestartmenu();
 
 			// Open terminal
-			new terminal.init();
+			new program_terminal.init();
 		});
 	}
 

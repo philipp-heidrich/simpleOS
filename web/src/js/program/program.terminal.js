@@ -1,10 +1,17 @@
 (function()
 {
-	this.AUTHOR = 'Philipp Heidrich';
+	this.program_terminal = {
+		AUTHOR: 'Philipp Heidrich'
+	}
 
-	this.init = function()
+
+	/**
+	 *	Inital terminal
+	 */
+	program_terminal.init = function()
 	{
-		
+		// Create html
+		program.start('terminal', 'Terminal');
 	}
 
 
@@ -12,4 +19,4 @@
 
 
 
-}).call(this.terminal = {});
+}).call(this);

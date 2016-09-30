@@ -28,4 +28,5 @@
 /* @import blocks
 ---------------------------------------------------------------*/
 @import 'block/startmenu.css';
+@import 'block/program.css';
 @import 'block/taskline.css';

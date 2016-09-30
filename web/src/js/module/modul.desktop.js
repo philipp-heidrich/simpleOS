@@ -52,7 +52,8 @@
 		boot.printBootMessage('&#10142; load objects');
  		desktop.obj = {
  			wrapper: document.querySelector('#wrapper'),
- 			content: document.querySelector('.desktop')
+ 			content: document.querySelector('.desktop'),
+			program: document.querySelector('.desktop .desktop__programs')
  		}
 
 		boot.printBootMessage('<br>');

@@ -4,7 +4,7 @@ html {
 	min-height: 100%;
 	background-color: #000;
 
-	& .hiddenModule {
+	& #programs {
 		display: none;
 	}
 

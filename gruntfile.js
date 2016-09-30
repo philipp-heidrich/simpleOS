@@ -126,6 +126,7 @@ module.exports = function(grunt)
                     '**/*.html',
                     '!widget/**/*.html',
                     '!layout/**/*.html',
+                    '!program/**/*.html',
 					'!module/**/*.html'
                 ],
                 dest: path.build.debug + '/',
