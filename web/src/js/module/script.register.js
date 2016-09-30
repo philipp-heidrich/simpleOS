@@ -6,66 +6,112 @@
 
 
 	/**
+	 *
+	 *	Inital functions
+	 *
+	 */
+
+	/**
 	 *	Inital Desktop
 	 */
 	register.init = function()
 	{
 		// Starte Screen
-		register.showScreen();
+		register.init_showScreen();
+
+		// Add events
+		register.init_addEvents();
 	}
 
 
 	/**
 	 *	Start login screen
 	 */
-	register.showScreen = function()
+	register.init_showScreen = function()
  	{
-		// Add events
-		register.addEvents();
-
-		// Remove boot content
-		boot.obj.content.className = boot.obj.content.className.replace(' content--active', '');
-
-		// Show register content
-		register.obj.content.removeAttribute('hidden');
-		register.obj.content.className += ' content--active';
-
-		// Fade in desktop
-		setTimeout(function()
-		{
-			register.obj.content.className += ' register--show';
-		}, 10);
+		// Change Module
+		class_module.changeModule(register.obj.content);
  	}
 
 
 	/**
-	 *	Start login boot
+	 *	Add event listener to objects
 	 */
-	register.boot = function()
+	register.init_addEvents = function()
 	{
-		// Show message
-		boot.printBootMessage('Load register');
+		// Submit form
+		register.obj.form.addEventListener('submit', function(event)
+		{
+			event.preventDefault();
+			return false;
+		});
 
-		// Lade HTML
-		register.obj = {
-			wrapper: document.querySelector('#wrapper'),
-			content: document.querySelector('.register'),
-			form: document.querySelector('.register .register__form'),
-			input_userName: document.querySelector('.register .js_inputName'),
-			input_pcName: document.querySelector('.register .js_inputPcname'),
-			input_pwd: document.querySelector('.register .js_inputPwd'),
-			input_pwdRepeat: document.querySelector('.register .js_inputPwdRepeat'),
-			button_fin: document.querySelector('.register .js_registerFin')
-		}
+		// Username input
+		register.obj.input_name.addEventListener('keyup', function(event)
+		{
+			convertPCname();
+		});
+
+		// Next Button
+		register.obj.button_fin.addEventListener('click', function(event)
+		{
+			createFirstUser();
+		});
 	}
 
+
+
+
+
+
+	/**
+	 *
+	 *	Boot functions
+	 *
+	 */
+
+	/**
+ 	 *	Start login boot
+ 	 */
+	 register.boot = function()
+ 	{
+ 		// Show message
+ 		boot.printBootMessage('Load register');
+
+ 		// Lade HTML
+		boot.printBootMessage('&#10142; load objects');
+ 		register.obj = {
+ 			wrapper: document.querySelector('#wrapper'),
+ 			content: document.querySelector('.register'),
+ 			form: document.querySelector('.register .register__form'),
+ 			input_name: document.querySelector('.register .js__inputName'),
+ 			input_id: document.querySelector('.register .js__inputId'),
+ 			input_pcName: document.querySelector('.register .js__inputPcname'),
+ 			input_pwd: document.querySelector('.register .js__inputPwd'),
+ 			input_pwdRepeat: document.querySelector('.register .js__inputPwdRepeat'),
+ 			button_fin: document.querySelector('.register .js__registerFin')
+ 		}
+
+		boot.printBootMessage('<br>');
+ 	}
+
+
+
+
+
+
+	/**
+	 *
+	 *	Private functions
+	 *
+	 */
 
 	/**
 	 *	Convert pcname
 	 */
-	register.convertPCname = function()
+	function convertPCname()
 	{
-		var name = register.obj.input_userName.value;
+		var name = register.obj.input_name.value;
 
 		// Edit
 		name = name.replace(/ /gi, '.');
@@ -74,15 +120,17 @@
 
 		// Set new pc name
 		register.obj.input_pcName.value = name;
+		register.obj.input_id.value = name;
 	}
 
 
 	/**
 	 *	Create first user
 	 **/
-	register.createFirstUser = function()
+	function createFirstUser()
 	{
-		var name = register.obj.input_userName.value,
+		var name = register.obj.input_name.value,
+			id = register.obj.input_id.value,
 			pwd = register.obj.input_pwd.value,
 			pcname = register.obj.input_pcName.value;
 
@@ -112,14 +160,8 @@
 		var newUser = class_user.createNewUser(name, pcname, pwd, 'admin');
 		if(newUser)
 		{
-			// Save pc name
-			option.save('os_name', pcname);
-
-			// Save complete first visit
-			option.save('os_firstVisit', true);
-
-			// Go to login screen
-			login.init();
+			// Go to login
+			goLoginSite(pcname);
 		}
 		else
 		{
@@ -132,30 +174,23 @@
 	}
 
 
-
 	/**
-	 *	Add event listener to objects
+	 *	Go to login site
 	 */
-	register.addEvents = function()
+	function goLoginSite(pcname)
 	{
-		// Submit form
-		register.obj.form.addEventListener('submit', function(event)
-		{
-			event.preventDefault();
-			return false;
-		});
+		// Save first pc visit
+		os.saveFirstPcVisit();
 
-		// Username input
-		register.obj.input_userName.addEventListener('keyup', function(event)
-		{
-			register.convertPCname();
-		});
+		// Save PC name
+		os.savePcName(pcname);
 
-		// Next Button
-		register.obj.button_fin.addEventListener('click', function(event)
-		{
-			register.createFirstUser();
-		});
+		// Save last login user
+		class_user.saveCurrentUser(pcname);
+
+		// Go to login screen
+		login.init();
 	}
+
 
 }).call(this);

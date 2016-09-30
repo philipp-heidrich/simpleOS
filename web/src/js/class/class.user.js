@@ -5,6 +5,11 @@
 	}
 
 
+
+	/**
+	 *	Public functons
+	 */
+
 	/**
 	 *	Create new user
 	 */
@@ -22,23 +27,23 @@
 			return;
 		}
 
-		var newUser = {
-			id: id,
+		var userObj = {
 			name: name,
-			type: type
+			type: type,
+			pwd: false
 		}
 
 		// Hash pwd
 		if(pwd)
 		{
-			newUser.pwd = class_user.hashpwd(pwd);
+			userObj = hashpwd(pwd);
 		}
 
 		// Load account array
 		var allAccounts = option.load('account_users');
 
 		// Add new user to array
-		allAccounts.push(newUser);
+		allAccounts[id] = userObj;
 
 		// Save new account array
 		option.save('account_users', allAccounts);
@@ -48,9 +53,73 @@
 
 
 	/**
+	 *	Get all pc users
+	 */
+	class_user.getAllUsers = function()
+	{
+		return option.load('account_users');
+	}
+
+
+	/**
+	 *	Get length of users
+	 */
+	class_user.getUserLength = function()
+	{
+		var users = option.load('account_users');
+		return users.length;
+	}
+
+
+	/**
+	 *	Get last login user
+	 */
+	class_user.getCurrentUser = function()
+	{
+		var lastlogin = option.load('account_currentUser');
+		return lastlogin;
+	}
+
+
+	/**
+	 *	Save last login user
+	 */
+	class_user.saveCurrentUser = function(userId)
+	{
+		option.save('account_currentUser', userId);
+	}
+
+
+	/**
+	 *	Check right pwd
+	 */
+	class_user.checkPwd = function(pwd, pwdhash)
+	{
+		var newPwdHash = hashpwd(pwd);
+
+		if(newPwdHash == pwdhash)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+
+
+
+
+
+	/**
+	 *	Private functions
+	 */
+
+	/**
 	 *	Hash password
 	 */
-	class_user.hashpwd = function(pwd)
+	function hashpwd(pwd)
 	{
 		var hash = 0;
 
@@ -59,7 +128,7 @@
 			return hash;
 		}
 
-		for (i = 0; i < pwd.length; i++)
+		for(i = 0; i < pwd.length; i++)
 		{
 			char = pwd.charCodeAt(i);
 			hash = ((hash<<5)-hash)+char;
@@ -68,8 +137,6 @@
 
 		return hash;
 	}
-
-
 
 
 }).call(this);

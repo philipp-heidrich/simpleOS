@@ -16,14 +16,15 @@
 		// Inital bootloader
 		boot.loader([
 			register.boot,
-			login.boot
+			login.boot,
+			desktop.boot
 		],
 
 		// Run Callback
 		function()
 		{
 			// Check is this the first visit
-			if(boot.check_isFirstVisit())
+			if(os.getFirstPcVisit())
 			{
 				setTimeout(register.init, 500);
 			}
@@ -56,11 +57,12 @@
 		{
 			if(loadArray.length)
 			{
-				// Run first array function
-				loadArray[0]();
-
 				// Delete first array function
-				loadArray.shift();
+				var _firstEl = loadArray.shift();
+
+				// Run first array function
+				if(_firstEl)
+					_firstEl();
 
 				// Run next loading
 				boot.loader(loadArray, cb);
@@ -84,25 +86,6 @@
 		var li = document.createElement('li');
 		li.innerHTML = message;
 		boot.obj.scroller.appendChild(li);
-	}
-
-
-	/**
-	 *	Check is this the first visit
-	 */
-	boot.check_isFirstVisit = function()
-	{
-		if(
-			!option.load('os_firstVisit') ||
-			option.load('os_firstVisit') == false
-		)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
 	}
 
 

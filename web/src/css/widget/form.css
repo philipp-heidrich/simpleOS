@@ -14,7 +14,7 @@ input[type='submit'] {
 	background-color: #d8d8d8;
 	cursor: default;
 	transition: .4s var(--transition-art);
-	
+
 	&:hover {
 		background-color: #b9b9b9;
 	}
@@ -54,6 +54,7 @@ input[type='checkbox'] {
 		margin: 0;
 		display: block;
 		font-size: .8rem;
+		margin-bottom: 5px;
 	}
 
 	& input {

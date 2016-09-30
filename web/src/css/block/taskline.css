@@ -1,0 +1,22 @@
+.taskline {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 44px;
+	background-color: rgba(0, 0, 0, .3);
+
+	& .taskline__start {
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 44px;
+		height: 100%;
+		background-color: transparent;
+		transition: background-color .3s var(--transition-art);
+
+		&:hover {
+			background-color: rgba(0, 0, 0, .2);
+		}
+	}
+}

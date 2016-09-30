@@ -3,6 +3,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, blockquot
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+	user-select: none;
 }
 
 p {

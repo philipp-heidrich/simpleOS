@@ -1,7 +1,5 @@
 .register {
 	background-color: var(--color-main);
-	transition: 1s var(--transition-art);
-	opacity: 0;
 	color: #fff;
 
 	&.register--show {
@@ -23,8 +21,9 @@
 			clear: both;
 		}
 
-		&.register__block--pwd {
-			margin-top: 50px;
+		&.register__block--pwd,
+		&.register__block--system {
+			margin-top: 60px;
 		}
 	}
 

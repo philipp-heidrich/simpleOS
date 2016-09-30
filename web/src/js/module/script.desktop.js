@@ -6,37 +6,69 @@
 
 
 	/**
+	 *
+	 *	Inital functions
+	 *
+	 */
+
+	/**
 	 *	Inital Desktop
 	 */
 	desktop.init = function()
 	{
 		// Starte Screen
-		desktop.showScreen();
+		desktop.init_showScreen();
 	}
 
 
 	/**
 	 *	Start screen
 	 */
-	desktop.showScreen = function()
+	desktop.init_showScreen = function()
  	{
-		var hiddenContent = document.querySelector('.hiddenModule .hidden_desktop');
-
-		// Clone Desktop
-		desktop.obj = hiddenContent.cloneNode(true);
-
-		// Replace class
-		desktop.obj.className = desktop.obj.className.replace('hidden_', '');
-
-		// Put element into wrapper
-		document.querySelector('#wrapper').appendChild(desktop.obj);
-
-		// Fade in desktop
-		setTimeout(function()
-		{
-			desktop.obj.className += ' desktop--show';
-		}, 10);
+		// Change Module
+		class_module.changeModule(desktop.obj.content);
  	}
+
+
+
+
+
+	/**
+	 *
+	 *	Boot functions
+	 *
+	 */
+
+	 /**
+ 	 *	Start login boot
+ 	 */
+ 	desktop.boot = function()
+ 	{
+ 		// Show message
+ 		boot.printBootMessage('Load desktop');
+
+		// Lade HTML
+		boot.printBootMessage('&#10142; load objects');
+ 		desktop.obj = {
+ 			wrapper: document.querySelector('#wrapper'),
+ 			content: document.querySelector('.desktop')
+ 		}
+
+		boot.printBootMessage('<br>');
+ 	}
+
+
+
+
+
+	/**
+	 *
+	 *	Private functions
+	 *
+	 */
+
+
 
 
 

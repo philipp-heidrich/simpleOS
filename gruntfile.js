@@ -69,8 +69,24 @@ module.exports = function(grunt)
                 overwrite: true,
 				replacements: [
                     {
-    					from: 	'{{ calm.version }}',
+    					from: 	'{{ version }}',
     					to: 	'<%= pkg.version %>'
+    				},
+                    {
+    					from: 	'{{ name }}',
+    					to: 	'<%= pkg.name %>'
+    				},
+                    {
+    					from: 	'{{ author }}',
+    					to: 	'<%= pkg.author %>'
+    				},
+                    {
+    					from: 	'{{ author_mail }}',
+    					to: 	'<%= pkg.author_mail %>'
+    				},
+                    {
+    					from: 	'{{ description }}',
+    					to: 	'<%= pkg.description %>'
     				},
                     {
                         from:   '{{ timestamp }}',
@@ -128,7 +144,8 @@ module.exports = function(grunt)
             html: {
                 files: path.html + '/**/*.html',
                 tasks: [
-                    'includereplace:debug'
+                    'includereplace:debug',
+					'replace:debug'
                 ]
             },
 			css: {

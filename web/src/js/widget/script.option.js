@@ -4,6 +4,8 @@
 		AUTHOR: 'Philipp Heidrich'
 	}
 
+	option.globalParam = "wos";
+
 
 	/**
 	 *	Hole default Wert
@@ -15,13 +17,13 @@
 		switch(lsItem)
 		{
 			// User
-			case 'sos_account_status':
+			case option.globalParam + '_account_status':
 				defaultItem = 'pwd';
 				break;
 
 			// Users
-			case 'sos_account_users':
-				defaultItem = [];
+			case option.globalParam + '_account_users':
+				defaultItem = {};
 				break
 		}
 
@@ -33,7 +35,7 @@
 	option.load = function(item)
 	{
 		var defaultItem = null,
-			lsItem 		= 'sos_' + item;
+			lsItem 		= option.globalParam + '_' + item;
 
 		// Versuche Objeckt aus dem LS zu holen
 		var returnValue = localStorage.getItem(lsItem);
@@ -72,7 +74,7 @@
 			var saveJSON = option.getDefault(type);
 		}
 
-		localStorage.setItem('sos_' + type, saveJSON);
+		localStorage.setItem(option.globalParam + '_' + type, saveJSON);
 	}
 
 	/**
@@ -129,7 +131,7 @@
 		for(var _obj in importObj)
 		{
 			// Prüfen ob es eine Calm Einstellung ist
-			if(_obj.match(/sos_/g))
+			if(_obj.match(option.globalParam))
 			{
 				localStorage.setItem(_obj, importObj[_obj]);
 			}
