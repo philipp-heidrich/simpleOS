@@ -19,7 +19,7 @@
 			login.boot,
 			desktop.boot,
 			taskline.boot,
-			startobj.boot
+			startmenu.boot
 		],
 
 		// Run Callback

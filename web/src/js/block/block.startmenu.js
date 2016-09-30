@@ -1,6 +1,6 @@
 (function()
 {
-	this.startobj = {
+	this.startmenu = {
 		AUTHOR: 'Philipp Heidrich'
 	}
 
@@ -14,19 +14,19 @@
 	 /**
  	 *	Start login boot
  	 */
- 	startobj.boot = function()
+ 	startmenu.boot = function()
  	{
  		// Show message
- 		boot.printBootMessage('Load startobj');
+ 		boot.printBootMessage('Load startmenu');
 
 		// Lade HTML
 		boot.printBootMessage('&#10142; load objects');
 
-		startobj.obj = {
-			startobj_btn: document.querySelector('.taskline__start'),
+		startmenu.obj = {
+			startmenu_btn: document.querySelector('.taskline__start'),
 
-			area: document.querySelector('.startobj'),
- 			programm_terminal: document.querySelector('.startobj .js__onclickTerminal')
+			area: document.querySelector('.startmenu'),
+ 			programm_terminal: document.querySelector('.startmenu .js__onclickTerminal')
  		}
 
 		boot.printBootMessage('<br>');
@@ -48,29 +48,29 @@
 	 */
 
 	/**
-	 *	Open startobj
+	 *	Open startmenu
 	 */
-	function openStartobj()
+	function openstartmenu()
 	{
-		if(!startobj.status_startobj)
+		if(!startmenu.status_startmenu)
 		{
-			startobj.status_startobj = true;
+			startmenu.status_startmenu = true;
 
-			startobj.obj.area.className += ' startobj--active';
+			startmenu.obj.area.className += ' startmenu--active';
 		}
 	}
 
 
 	/**
-	 *	Close startobj
+	 *	Close startmenu
 	 */
-	function closeStartObj()
+	function closestartmenu()
 	{
-		if(startobj.status_startobj)
+		if(startmenu.status_startmenu)
 		{
-			startobj.status_startobj = false;
+			startmenu.status_startmenu = false;
 
-			startobj.obj.area.className = startobj.obj.area.className.replace(' startobj--active', '');
+			startmenu.obj.area.className = startmenu.obj.area.className.replace(' startmenu--active', '');
 		}
 	}
 
@@ -87,26 +87,26 @@
 
 			if(
 				hasParent('.taskline__start', obj) &&
-				!startobj.status_startobj
+				!startmenu.status_startmenu
 			)
 			{
-				openStartobj();
+				openstartmenu();
 			}
 
 			else if(
-				!hasParent('.startobj', obj) &&
-				startobj.status_startobj
+				!hasParent('.startmenu', obj) &&
+				startmenu.status_startmenu
 			)
 			{
-				closeStartObj();
+				closestartmenu();
 			}
 		});
 
 		// Click event: terminal program
-		startobj.obj.programm_terminal.addEventListener('click', function()
+		startmenu.obj.programm_terminal.addEventListener('click', function()
 		{
 			// Close start menu
-			closeStartObj();
+			closestartmenu();
 
 			// Open terminal
 			new terminal.init();

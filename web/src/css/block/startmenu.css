@@ -1,4 +1,4 @@
-.startobj {
+.startmenu {
 	position: absolute;
 	z-index: 2;
 	left: 5px;
@@ -8,22 +8,22 @@
 	color: #fff;
 	transition: .5s var(--transition-art);
 
-	&.startobj--active {
+	&.startmenu--active {
 		opacity: 1;
 	}
 
-	& .startobj__content {
+	& .startmenu__content {
 		padding: 10px;
 	}
 
-	& .startobj__header {
+	& .startmenu__header {
 		font-size: 1.2rem;
 		font-weight: 100;
 		margin: 10px 10px 7px;
 		text-transform: uppercase;
 	}
 
-	& .startobj__list {
+	& .startmenu__list {
 		min-width: 170px;
 
 		& > li {
@@ -39,7 +39,7 @@
 		}
 	}
 
-	& .startobj__listIcon {
+	& .startmenu__listIcon {
 		position: absolute;
 		left: 4px;
 		top: 4px;
