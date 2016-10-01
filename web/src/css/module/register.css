@@ -21,8 +21,7 @@
 			clear: both;
 		}
 
-		&.register__block--pwd,
-		&.register__block--system {
+		&.register__block--pwd {
 			margin-top: 60px;
 		}
 	}

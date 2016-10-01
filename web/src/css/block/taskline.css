@@ -26,8 +26,10 @@
 	}
 
 	& .taskline__time {
-		float: right;
-		min-width: 120px;
+		position: absolute;
+		right: 0;
+		top: 0;
+		width: 120px;
 		height: 100%;
 		color: #fff;
 		text-align: center;
@@ -42,5 +44,40 @@
 	& .taskline__date {
 		font-size: .8rem;
 		line-height: 15px;
+	}
+
+	& .taskline__programArea {
+		position: absolute;
+		left: 44px;
+		top: 0;
+		right: 120px;
+		height: 100%;
+	}
+
+	& .taskline__programOpen {
+		float: left;
+		height: 100%;
+	}
+
+	& .taskline__program {
+		padding: 0 10px;
+		height: 100%;
+		float: left;
+		min-width: 50px;
+		margin-right: 3px;
+		color: #fff;
+		transition: .4s var(--transition-art);
+
+		&.taskline__program--selected {
+			background-color: red;
+		}
+
+		&:hover {
+			background-color: rgba(0, 0, 0, .1);
+		}
+	}
+
+	& .taskline__programTxt {
+		line-height: 44px;
 	}
 }

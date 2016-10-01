@@ -23,7 +23,8 @@
 		boot.printBootMessage('&#10142; load objects');
  		taskline.obj = {
  			time_timeday: document.querySelector('.taskline .taskline__timeday'),
- 			time_date: document.querySelector('.taskline .taskline__date')
+ 			time_date: document.querySelector('.taskline .taskline__date'),
+			program_open: document.querySelector('.taskline .taskline__programOpen')
  		}
 
 		// Lade date + time
@@ -134,7 +135,7 @@
 		returnObj.hour = (returnObj.hour < 10) ? '0' + returnObj.hour : returnObj.hour;
 		returnObj.date = (returnObj.date < 10) ? '0' + returnObj.date : returnObj.date;
 		returnObj.month = (returnObj.month < 10) ? '0' + returnObj.month : returnObj.month;
-		
+
 		return returnObj;
 	}
 

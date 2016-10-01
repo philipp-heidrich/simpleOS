@@ -2,7 +2,7 @@
 {
 	this.msg = {
 		AUTHOR: 'Philipp Heidrich',
-		VERSION: '1'
+		VERSION: 2
 	}
 
 
@@ -349,30 +349,40 @@
 
 
 	/**
+	 *	Keypress close event
+	 */
+	function keypresCloseMsg(event)
+ 	{
+ 		// Press [Enter]
+ 		if(event.keyCode == 13)
+ 		{
+ 			// Close msg box
+ 			msg.close();
+
+ 			// Stoppe default event
+ 			event.preventDefault();
+
+ 			removeEvents();
+ 		}
+ 	}
+
+
+	/**
 	 *	Add events
 	 */
 	function addEvents()
 	{
-		function closeMsg(event)
-		{
-			// Press [Enter]
-			if(event.keyCode == 13)
-			{
-				// Close msg box
-				msg.close();
+		window.addEventListener('keypress', keypresCloseMsg);
+	}
 
-				// Stoppe event listener
-				event.preventDefault();
 
-				// Remove event listener
-				window.removeEventListener('keypress', closeMsg, false);
-			}
-			else {
-				event.preventDefault();
-			}
-		}
-
-		window.addEventListener('keypress', closeMsg);
+	/**
+	 *	Remove events
+	 */
+	function removeEvents()
+	{
+		// Remove event listener
+		window.removeEventListener('keypress', keypresCloseMsg, false);
 	}
 
 

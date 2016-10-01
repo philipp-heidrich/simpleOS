@@ -17,17 +17,17 @@
 	register.init = function()
 	{
 		// Starte Screen
-		register.init_showScreen();
+		init_showScreen();
 
 		// Add events
-		register.init_addEvents();
+		init_addEvents();
 	}
 
 
 	/**
 	 *	Start login screen
 	 */
-	register.init_showScreen = function()
+	function init_showScreen()
  	{
 		// Change Module
 		class_module.changeModule(register.obj.content);
@@ -37,7 +37,7 @@
 	/**
 	 *	Add event listener to objects
 	 */
-	register.init_addEvents = function()
+	function init_addEvents()
 	{
 		// Submit form
 		register.obj.form.addEventListener('submit', function(event)
@@ -49,13 +49,19 @@
 		// Username input
 		register.obj.input_name.addEventListener('keyup', function(event)
 		{
-			convertPCname();
+			register.obj.input_pcName.value = convertPCname(register.obj.input_name.value);
 		});
 
 		// Next Button
 		register.obj.button_fin.addEventListener('click', function(event)
 		{
-			createFirstUser();
+			if(
+				createFirstUser() &&
+				createOSSettings()
+			)
+			{
+				goLoginSite();
+			}
 		});
 	}
 
@@ -73,7 +79,7 @@
 	/**
  	 *	Start login boot
  	 */
-	 register.boot = function()
+	register.boot = function()
  	{
  		// Show message
  		boot.printBootMessage('Load register');
@@ -85,7 +91,6 @@
  			content: document.querySelector('.register'),
  			form: document.querySelector('.register .register__form'),
  			input_name: document.querySelector('.register .js__inputName'),
- 			input_id: document.querySelector('.register .js__inputId'),
  			input_pcName: document.querySelector('.register .js__inputPcname'),
  			input_pwd: document.querySelector('.register .js__inputPwd'),
  			input_pwdRepeat: document.querySelector('.register .js__inputPwdRepeat'),
@@ -109,18 +114,14 @@
 	/**
 	 *	Convert pcname
 	 */
-	function convertPCname()
+	function convertPCname(name)
 	{
-		var name = register.obj.input_name.value;
-
 		// Edit
 		name = name.replace(/ /gi, '.');
 		name = name.replace(/[^a-zA-Z0-9\.]/g, '');
 		name = name.toLowerCase();
 
-		// Set new pc name
-		register.obj.input_pcName.value = name;
-		register.obj.input_id.value = name;
+		return name;
 	}
 
 
@@ -129,10 +130,9 @@
 	 **/
 	function createFirstUser()
 	{
-		var name = register.obj.input_name.value,
-			id = register.obj.input_id.value,
-			pwd = register.obj.input_pwd.value,
-			pcname = register.obj.input_pcName.value;
+		var name 	= register.obj.input_name.value,
+			pwd 	= register.obj.input_pwd.value,
+			id 		= convertPCname(register.obj.input_name.value);
 
 		// Check is this the same pwd
 		if(
@@ -147,21 +147,17 @@
 				}
 			});
 
-			return;
-		}
-
-		// Check if a pwd entry
-		if(!pwd.length)
-		{
-			pwd = false;
+			return false;
 		}
 
 		// Create new user
-		var newUser = class_user.createNewUser(name, pcname, pwd, 'admin');
+		var newUser = class_user.createNewUser(name, id, pwd, 'admin');
 		if(newUser)
 		{
-			// Go to login
-			goLoginSite(pcname);
+			// Save last login user
+			class_user.saveCurrentUser(id);
+
+			return true;
 		}
 		else
 		{
@@ -170,24 +166,34 @@
 					txt: "Please fill all fields"
 				}
 			});
+
+			return false;
 		}
 	}
 
 
 	/**
-	 *	Go to login site
+	 *	Create os settings
 	 */
-	function goLoginSite(pcname)
+	function createOSSettings()
 	{
+		var pcname = convertPCname(register.obj.input_pcName.value);
+
 		// Save first pc visit
 		os.saveFirstPcVisit();
 
 		// Save PC name
 		os.savePcName(pcname);
 
-		// Save last login user
-		class_user.saveCurrentUser(pcname);
+		return true;
+	}
 
+
+	/**
+	 *	Go to login site
+	 */
+	function goLoginSite()
+	{
 		// Go to login screen
 		login.init();
 	}

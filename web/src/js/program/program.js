@@ -7,7 +7,7 @@
 	program.list 		= {};
 	program.selected	= false;
 	program.counter 	= 10;
-	program.id 		= 0;
+	program.id 			= 0;
 
 
 
@@ -46,61 +46,95 @@
 	program.start = function(id, title)
 	{
 		var tmpl 	= document.querySelector('#programs [program="' + id + '"]'),
-			progObj = {};
+			o 		= {};
 
 		// Set new id
 		program.id++;
-		progObj.id = program.id;
+		o.id = program.id;
 
-		progObj.layer = document.createElement('div');
-		progObj.layer.program_id = progObj.id;
-		progObj.layer.setAttribute('data-program-id', progObj.id);
-		progObj.layer.className = 'program program--selected';
+		o.layer = document.createElement('div');
+		o.layer.program_id = o.id;
+		o.layer.setAttribute('data-program-id', o.id);
+		o.layer.className = 'program';
 
 		// Header
-		progObj.header = document.createElement('div');
-		progObj.header.className = 'program__header';
-		progObj.layer.appendChild(progObj.header);
+		o.header = document.createElement('div');
+		o.header.className = 'program__header';
+		o.layer.appendChild(o.header);
 
-		progObj.headerTitle = document.createElement('div');
-		progObj.headerTitle.className = 'program__title';
-		progObj.headerTitle.innerHTML = title;
-		progObj.header.appendChild(progObj.headerTitle);
+		o.headerTitle = document.createElement('div');
+		o.headerTitle.className = 'program__title';
+		o.headerTitle.innerHTML = title;
+		o.header.appendChild(o.headerTitle);
 
-		progObj.headerRight = document.createElement('div');
-		progObj.headerRight.className = 'program__headerRight';
-		progObj.header.appendChild(progObj.headerRight);
+		o.headerRight = document.createElement('div');
+		o.headerRight.className = 'program__headerRight';
+		o.header.appendChild(o.headerRight);
 
-		progObj.headerClose = document.createElement('div');
-		progObj.headerClose.className = 'program__headerBtn program__headerBtn--close';
-		progObj.headerRight.appendChild(progObj.headerClose);
+		// Close Btn
+		o.headerClose = document.createElement('div');
+		o.headerClose.className = 'program__headerBtn program__headerBtn--close';
+		o.headerClose.onclick = function()
+		{
+			removeWindow(o.layer);
+		}
+		o.headerRight.appendChild(o.headerClose);
 
-		progObj.headerCloseImg = document.createElement('i');
-		progObj.headerCloseImg.className = 'material-icons';
-		progObj.headerCloseImg.innerHTML = 'close';
-		progObj.headerClose.appendChild(progObj.headerCloseImg);
+		o.headerCloseImg = document.createElement('i');
+		o.headerCloseImg.className = 'material-icons';
+		o.headerCloseImg.innerHTML = 'close';
+		o.headerClose.appendChild(o.headerCloseImg);
+
 
 		// Content
-		progObj.content = tmpl.cloneNode(true);
-		progObj.content.className = 'program__content';
-		progObj.layer.appendChild(progObj.content);
+		o.content = tmpl.cloneNode(true);
+		o.content.className = 'program__content';
+		o.layer.appendChild(o.content);
 
-		// Remove all selectets
-		// TODO
+		// Add Taskmanager
+		addProgramToTaskLine(id, title, o);
 
-		// Set to selected
-		program.selected = progObj.id;
+		// Set new position
+		// Check if is a selected window
+		if(program.selected)
+		{
+			var obj = program.list[program.selected],
+				pos_x = obj.layer.offsetLeft,
+				pos_y = obj.layer.offsetTop;
 
-		// Set new z-index
-		program.counter++;
-		progObj.layer.style.zIndex = program.counter;
+			setNewWindowPosition(o.layer, pos_x, pos_y);
+		}
+
+		// Check if is a window found
+		else if(
+			program.id - 1 &&
+			program.list[program.id - 1]
+		)
+		{
+			var obj = program.list[program.id - 1],
+				pos_x = obj.layer.offsetLeft,
+				pos_y = obj.layer.offsetTop;
+
+			setNewWindowPosition(o.layer, pos_x, pos_y);
+		}
 
 		// Add this object to global array
-		program.list[progObj.id] = progObj;
+		program.list[o.id] = o;
 
-		// Add program to desktop
-		desktop.obj.program.appendChild(progObj.layer);
+		// Time delay
+		setTimeout(function()
+		{
+			// Add program to desktop
+			desktop.obj.program.appendChild(o.layer);
+
+			// Remove all selectets
+			removeSelection();
+
+			// Set to selected
+			setSelection(o.id);
+		}, 100);
 	}
+
 
 
 
@@ -113,6 +147,62 @@
 	 *	Private functions
 	 *
 	 */
+
+	/**
+ 	 *	Add a new program to taskline
+ 	 */
+ 	function addProgramToTaskLine(id, title, o)
+ 	{
+ 		o.taskProgram = document.createElement('li');
+ 		o.taskProgram.program_id = o.id;
+ 		o.taskProgram.className = 'taskline__program';
+
+ 		// Value
+ 		o.taskName = document.createElement('div');
+ 		o.taskName.className = 'taskline__programTxt';
+ 		o.taskName.innerHTML = title;
+ 		o.taskProgram.appendChild(o.taskName);
+
+ 		// Output
+ 		taskline.obj.program_open.appendChild(o.taskProgram);
+ 	}
+
+
+	/**
+	 *	Get current selected window
+	 */
+	function getSelectedWindow()
+	{
+		if(program.selected)
+		{
+			return program.list[program.selected];
+		}
+		else {
+			return false;
+		}
+	}
+
+
+	/**
+	 *	Close window
+	 */
+	function removeWindow(removeLayer)
+	{
+		var program_id = removeLayer.program_id;
+
+		// Remove object
+		delete program.list[program_id];
+
+		// Remove selection
+		if(program.selected == program_id)
+		{
+			program.selected = false;
+		}
+
+		// Remove html object
+		removeLayer.parentNode.removeChild(removeLayer);
+	}
+
 
 	/**
 	 *	Remove selection
@@ -134,25 +224,30 @@
 
 
 	/**
- 	 *	Check has this element this parent
- 	 */
- 	function hasParent(parent, child)
- 	{
- 		var node 	= child.parentNode,
- 			parent 	= document.querySelector(parent);
+	 *	Set selection
+	 */
+	function setSelection(selectNr)
+	{
+		if(
+			program.list[selectNr] &&
+			selectNr !== program.selected
+		)
+		{
+			var layer = program.list[selectNr].layer,
+				task = program.list[selectNr].taskProgram;
 
-        while(node != null)
- 		{
-             if(node == parent)
- 			{
-                 return true;
-             }
+			// Set new z-index
+			program.counter++;
+			layer.style.zIndex = program.counter;
 
-             node = node.parentNode;
-         }
+			// Set selection class
+			layer.className += ' program--selected';
+			task.className += ' taskline__program--selected';
 
-         return false;
- 	}
+			// Set global selection
+			program.selected = selectNr;
+		}
+	}
 
 
 	/**
@@ -163,21 +258,84 @@
 		// Globaler Click event
 		document.addEventListener('click', function(event)
 		{
-			var target = event.target;
+			var parentProgram = hasParent('.program', event.target, true);
 
 			// Check if this a child from a program
-			if(!hasParent('.program', target))
+			if(
+				!parentProgram ||
+				parentProgram.program_id !== program.list
+			)
 			{
 				// Remove selection
 				removeSelection();
 			}
 
 			// Set program selection
-			if(hasParent('.program', target))
+			if(
+				parentProgram &&
+				parentProgram.program_id
+			)
 			{
-				// TODO
+				setSelection(parentProgram.program_id);
 			}
 		});
+	}
+
+
+	/**
+ 	 *	Check has this element this parent
+ 	 */
+ 	function hasParent(parent, child, returnParent)
+ 	{
+		// Loop all Parents
+		function loopAllParents(node, parentArray)
+		{
+			for(var i = 0; i < parentArray.length; i++)
+			{
+				if(parentArray[i] == node)
+				{
+					return node;
+				}
+			}
+
+			return false;
+		}
+
+ 		var node = child.parentNode,
+			parents = (typeof parent == 'string') ? document.querySelectorAll(parent) : parent;
+
+        while(node != null)
+ 		{
+			var parentFound = loopAllParents(node, parents);
+
+			if(parentFound)
+			{
+				if(returnParent)
+				{
+					return parentFound;
+				}
+				else {
+					return true;
+				}
+			}
+
+			node = node.parentNode;
+        }
+
+        return false;
+ 	}
+
+
+	/**
+	 *	Set new window position
+	 */
+	function setNewWindowPosition(obj, left, top)
+	{
+		var distance = 25;
+
+		// Add new position
+		obj.style.left = left + distance + 'px';
+		obj.style.top = top + distance + 'px';
 	}
 
 
