@@ -11,7 +11,7 @@
 	program_terminal.init = function()
 	{
 		// Create html
-		program.start('terminal', 'Terminal');
+		program.startWindow('terminal', 'Terminal');
 	}
 
 
