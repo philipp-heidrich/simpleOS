@@ -45,54 +45,17 @@
 	 */
 	program.start = function(id, title)
 	{
-		var tmpl 	= document.querySelector('#programs [program="' + id + '"]'),
-			o 		= {};
+		var o = {};
 
 		// Set new id
 		program.id++;
 		o.id = program.id;
 
-		o.layer = document.createElement('div');
-		o.layer.program_id = o.id;
-		o.layer.setAttribute('data-program-id', o.id);
-		o.layer.className = 'program';
+		// Add window
+		createWindow(id, title, o);
 
-		// Header
-		o.header = document.createElement('div');
-		o.header.className = 'program__header';
-		o.layer.appendChild(o.header);
-
-		o.headerTitle = document.createElement('div');
-		o.headerTitle.className = 'program__title';
-		o.headerTitle.innerHTML = title;
-		o.header.appendChild(o.headerTitle);
-
-		o.headerRight = document.createElement('div');
-		o.headerRight.className = 'program__headerRight';
-		o.header.appendChild(o.headerRight);
-
-		// Close Btn
-		o.headerClose = document.createElement('div');
-		o.headerClose.className = 'program__headerBtn program__headerBtn--close';
-		o.headerClose.onclick = function()
-		{
-			removeWindow(o.layer);
-		}
-		o.headerRight.appendChild(o.headerClose);
-
-		o.headerCloseImg = document.createElement('i');
-		o.headerCloseImg.className = 'material-icons';
-		o.headerCloseImg.innerHTML = 'close';
-		o.headerClose.appendChild(o.headerCloseImg);
-
-
-		// Content
-		o.content = tmpl.cloneNode(true);
-		o.content.className = 'program__content';
-		o.layer.appendChild(o.content);
-
-		// Add Taskmanager
-		addProgramToTaskLine(id, title, o);
+		// Add taskmanager
+		createTaskProgram(id, title, o);
 
 		// Set new position
 		// Check if is a selected window
@@ -149,12 +112,68 @@
 	 */
 
 	/**
+	 *	Add a new window
+	 */
+	function createWindow(id, title, o)
+	{
+		var tmpl = document.querySelector('#programs [program="' + id + '"]');
+
+		o.layer = document.createElement('div');
+		o.layer.program_id = o.id;
+		o.layer.setAttribute('data-program-id', o.id);
+		o.layer.className = 'program';
+
+		// Header
+		o.header = document.createElement('div');
+		o.header.className = 'program__header';
+		o.layer.appendChild(o.header);
+
+		o.headerTitle = document.createElement('div');
+		o.headerTitle.className = 'program__title';
+		o.headerTitle.innerHTML = title;
+		o.header.appendChild(o.headerTitle);
+
+		o.headerRight = document.createElement('div');
+		o.headerRight.className = 'program__headerRight';
+		o.header.appendChild(o.headerRight);
+
+		// Close Btn
+		o.headerClose = document.createElement('div');
+		o.headerClose.className = 'program__headerBtn program__headerBtn--close';
+		o.headerClose.onclick = function()
+		{
+			removeWindow(o.id);
+		}
+		o.headerRight.appendChild(o.headerClose);
+
+		o.headerCloseImg = document.createElement('i');
+		o.headerCloseImg.className = 'material-icons';
+		o.headerCloseImg.innerHTML = 'close';
+		o.headerClose.appendChild(o.headerCloseImg);
+
+		// Content
+		o.content = tmpl.cloneNode(true);
+		o.content.className = 'program__content';
+		o.layer.appendChild(o.content);
+	}
+
+	/**
  	 *	Add a new program to taskline
  	 */
- 	function addProgramToTaskLine(id, title, o)
+ 	function createTaskProgram(id, title, o)
  	{
  		o.taskProgram = document.createElement('li');
  		o.taskProgram.program_id = o.id;
+		o.taskProgram.onclick = function(event)
+		{
+			program.disableClickEvent = true;
+
+			// Delete selections
+			removeSelection();
+
+			// Set new selection
+			setSelection(o.id);
+		}
  		o.taskProgram.className = 'taskline__program';
 
  		// Value
@@ -186,21 +205,23 @@
 	/**
 	 *	Close window
 	 */
-	function removeWindow(removeLayer)
+	function removeWindow(id)
 	{
-		var program_id = removeLayer.program_id;
-
-		// Remove object
-		delete program.list[program_id];
+		var _layer = program.list[id].layer,
+			_task = program.list[id].taskProgram;
 
 		// Remove selection
-		if(program.selected == program_id)
+		if(program.selected == id)
 		{
 			program.selected = false;
 		}
 
 		// Remove html object
-		removeLayer.parentNode.removeChild(removeLayer);
+		_layer.parentNode.removeChild(_layer);
+		_task.parentNode.removeChild(_task);
+
+		// Remove object
+		delete program.list[id];
 	}
 
 
@@ -211,11 +232,12 @@
 	{
 		if(program.selected)
 		{
-			var selection 	= program.selected,
-				obj 		= program.list[program.selected].layer;
+			var _layer 	= program.list[program.selected].layer,
+				_task 	= program.list[program.selected].taskProgram;
 
 			// Remove selection class
-			obj.className = obj.className.replace(' program--selected', '');
+			_layer.className = _layer.className.replace(' program--selected', '');
+			_task.className = _task.className.replace(' taskline__program--selected', '');
 
 			// Remove selection
 			program.selected = false;
@@ -233,16 +255,16 @@
 			selectNr !== program.selected
 		)
 		{
-			var layer = program.list[selectNr].layer,
-				task = program.list[selectNr].taskProgram;
+			var _layer = program.list[selectNr].layer,
+				_task = program.list[selectNr].taskProgram;
 
 			// Set new z-index
 			program.counter++;
-			layer.style.zIndex = program.counter;
+			_layer.style.zIndex = program.counter;
 
 			// Set selection class
-			layer.className += ' program--selected';
-			task.className += ' taskline__program--selected';
+			_layer.className += ' program--selected';
+			_task.className += ' taskline__program--selected';
 
 			// Set global selection
 			program.selected = selectNr;
@@ -258,25 +280,32 @@
 		// Globaler Click event
 		document.addEventListener('click', function(event)
 		{
-			var parentProgram = hasParent('.program', event.target, true);
-
-			// Check if this a child from a program
-			if(
-				!parentProgram ||
-				parentProgram.program_id !== program.list
-			)
+			if(program.disableClickEvent)
 			{
-				// Remove selection
-				removeSelection();
+				program.disableClickEvent = false;
 			}
-
-			// Set program selection
-			if(
-				parentProgram &&
-				parentProgram.program_id
-			)
+			else
 			{
-				setSelection(parentProgram.program_id);
+				var parentProgram = hasParent('.program', event.target, true);
+
+				// Check if this a child from a program
+				if(
+					!parentProgram ||
+					parentProgram.program_id !== program.list
+				)
+				{
+					// Remove selection
+					removeSelection();
+				}
+
+				// Set program selection
+				if(
+					parentProgram &&
+					parentProgram.program_id
+				)
+				{
+					setSelection(parentProgram.program_id);
+				}
 			}
 		});
 	}

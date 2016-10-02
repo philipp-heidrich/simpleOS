@@ -2,14 +2,14 @@
 	position: absolute;
 	z-index: 2;
 	left: 5px;
-	opacity: 0;
+	display: none;
 	bottom: 49px;
 	background-color: var(--color-main);
 	color: #fff;
 	transition: .5s var(--transition-art);
 
 	&.startmenu--active {
-		opacity: 1;
+		display: block;
 	}
 
 	& .startmenu__content {

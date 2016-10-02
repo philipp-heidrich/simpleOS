@@ -17,6 +17,7 @@
 		color: #6f6f6f;
 		background-color: transparent;
 		transition: .3s var(--transition-art);
+		color: #fff;
 
 		&:hover {
 			color: var(--color-main);
@@ -57,19 +58,21 @@
 	& .taskline__programOpen {
 		float: left;
 		height: 100%;
+		padding: 0 5px;
 	}
 
 	& .taskline__program {
-		padding: 0 10px;
+		padding: 0 13px;
 		height: 100%;
 		float: left;
 		min-width: 50px;
 		margin-right: 3px;
 		color: #fff;
+		border-top: 5px solid transparent;
 		transition: .4s var(--transition-art);
 
 		&.taskline__program--selected {
-			background-color: red;
+			border-color: var(--color-main);
 		}
 
 		&:hover {
@@ -78,6 +81,6 @@
 	}
 
 	& .taskline__programTxt {
-		line-height: 44px;
+		line-height: 35px;
 	}
 }
