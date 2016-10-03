@@ -54,6 +54,150 @@
 
 
 
+	/**
+	 *
+	 *	Public function
+	 *
+	 */
+
+	/**
+  	 *	Add a new program to taskline
+  	 */
+  	taskline.createTaskProgram = function(o)
+  	{
+  		o.taskProgram = document.createElement('li');
+  		o.taskProgram.program_id = o.id_counter;
+  		o.taskProgram.className = 'taskline__program';
+
+  		// Value
+		o.taskShow = document.createElement('div');
+		o.taskShow.className = 'taskline__showBlock';
+		o.taskShow.onclick = function(event)
+ 		{
+ 			// Remove global click event
+ 			program.disableClickEvent = true;
+
+ 			// Check is this minimized
+ 			if(o.isMinimized)
+ 			{
+ 				taskline.reminizedWindow(o.id_counter);
+ 				program.reminizedWindow(o.id_counter);
+ 			}
+
+ 			// Check ist selected
+ 			else if(o.isSelected)
+ 			{
+ 				taskline.minimizeWindow(o.id_counter);
+ 				program.minimizeWindow(o.id_counter);
+ 			}
+
+ 			// Set a new selection
+ 			else
+			{
+ 				taskline.setSelection(o.id_counter);
+ 				program.setSelection(o.id_counter);
+ 			}
+ 		}
+		o.taskProgram.appendChild(o.taskShow);
+
+  		o.taskName = document.createElement('div');
+  		o.taskName.className = 'taskline__programTxt';
+  		o.taskName.innerHTML = o.title;
+  		o.taskShow.appendChild(o.taskName);
+
+ 		// Taskmenu
+ 		o.taskMenu = document.createElement('div');
+ 		o.taskMenu.className = 'taskline__programMenu';
+ 		o.taskProgram.appendChild(o.taskMenu);
+
+ 		// Taskmenu - close
+ 		o.taskMenuClose = document.createElement('div');
+ 		o.taskMenuClose.className = 'taskline__programMenuBtn taskline__programMenuBtn--close';
+ 		o.taskMenuClose.onclick = function()
+ 		{
+ 			// Remove global click event
+ 			program.disableClickEvent = true;
+
+ 			program.removeWindow(o.id_counter);
+ 		}
+ 		o.taskMenu.appendChild(o.taskMenuClose);
+ 		o.taskMenuClose.appendChild(createFontIcon('close'));
+
+  		// Output
+  		taskline.obj.program_open.appendChild(o.taskProgram);
+  	}
+
+
+	/**
+ 	 *	Remove selection
+ 	 */
+ 	taskline.removeSelection = function()
+ 	{
+ 		if(program.selected)
+ 		{
+ 			var o = program.list[program.selected];
+
+ 			// Remove selection class
+ 			o.taskProgram.className = o.taskProgram.className.replace(' taskline__program--selected', '');
+ 		}
+ 	}
+
+
+	/**
+ 	 *	Set selection
+ 	 */
+ 	taskline.setSelection = function(selectNr)
+ 	{
+ 		if(
+ 			program.list[selectNr] &&
+ 			selectNr !== program.selected
+ 		)
+ 		{
+ 			var o = program.list[selectNr];
+
+ 			// Delete selections
+			taskline.removeSelection();
+
+ 			// Set selection class
+ 			o.taskProgram.className += ' taskline__program--selected';
+ 		}
+ 	}
+
+
+	/**
+ 	 *	Minimize window
+ 	 */
+ 	taskline.minimizeWindow = function(id)
+ 	{
+ 		var o = program.list[id];
+
+ 		// Remove selection
+		taskline.removeSelection();
+
+ 		// Edit HTML
+		o.taskProgram.className += ' taskline__program--minimized';
+ 	}
+
+
+	/**
+ 	 *	Reminimize window
+ 	 */
+ 	taskline.reminizedWindow = function(id)
+ 	{
+		var o = program.list[id];
+
+ 		// Remove selection
+		taskline.removeSelection();
+
+ 		// Edit HTML
+		o.taskProgram.className = o.taskProgram.className.replace(' taskline__program--minimized', '');
+	}
+
+
+
+
+
+
 
 
 
@@ -162,5 +306,21 @@
 		// Print time
 		taskline.obj.time_timeday.innerHTML = time.hour + ':' + time.min;
 	}
+
+
+	/**
+	 *	Create a google font icon
+	 */
+	function createFontIcon(fontType)
+	{
+		var iconfontObj = document.createElement('i');
+		iconfontObj.className = 'material-icons';
+		iconfontObj.innerHTML = fontType;
+
+		return iconfontObj;
+	}
+
+
+
 
 }).call(this);

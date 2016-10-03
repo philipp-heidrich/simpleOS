@@ -1,6 +1,8 @@
 :root {
 	--site-font: Roboto, sans-serif;
 
+	--taskline-height: 44px;
+
 	--transition-art: cubic-bezier(.215,.665,.11,.9);
 
 	/* Breakpoints */

@@ -3,7 +3,7 @@
 	left: 0;
 	bottom: 0;
 	width: 100%;
-	height: 44px;
+	height: var(--taskline-height);
 	background-color: rgba(0, 0, 0, .3);
 
 	& .taskline__start {
@@ -62,18 +62,21 @@
 	}
 
 	& .taskline__program {
-		padding: 0 13px;
 		height: 100%;
 		float: left;
 		min-width: 50px;
 		margin-right: 3px;
 		color: #fff;
-		border-top: 5px solid transparent;
+		border-top: 5px solid var(--color-main);
 		transition: .4s var(--transition-art);
 		position: relative;
 
 		&.taskline__program--selected {
-			border-color: var(--color-main);
+			background-color: rgba(0, 0, 0, .07);
+		}
+
+		&.taskline__program--minimized {
+			border-color: transparent;
 		}
 
 		&:hover {
@@ -86,6 +89,10 @@
 		}
 	}
 
+	& .taskline__showBlock {
+		padding: 0 13px;
+	}
+
 	& .taskline__programTxt {
 		line-height: 35px;
 	}
@@ -94,10 +101,10 @@
 		position: absolute;
 		left: 50%;
 		bottom: 100%;
-		width: 100px;
-		padding: 5px;
+		width: 38px;
+		padding: 7px;
 		opacity: 0;
-		margin: 0 0 5px -50px;
+		margin: 0 0 5px -17px;
 		background-color: #dedede;
 		transition: .4s var(--transition-art);
 

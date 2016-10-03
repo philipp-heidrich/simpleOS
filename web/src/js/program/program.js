@@ -57,7 +57,7 @@
 		createWindow(o);
 
 		// Add taskmanager
-		createTaskProgram(o);
+		taskline.createTaskProgram(o);
 
 		// Set new position
 		// Check if is a selected window
@@ -94,10 +94,222 @@
 			desktop.obj.program.appendChild(o.layer);
 
 			// Set to selected
-			setSelection(o.id_counter);
+			program.setSelection(o.id_counter);
 		}, 100);
 	}
 
+
+
+
+
+
+	/**
+	 *
+	 *	Public functions
+	 *
+	 */
+
+	 /**
+ 	 *	Get current selected window
+ 	 */
+ 	program.getSelectedWindow = function()
+ 	{
+ 		if(program.selected)
+ 		{
+ 			return program.list[program.selected];
+ 		}
+ 		else {
+ 			return false;
+ 		}
+ 	}
+
+
+ 	/**
+ 	 *	Close window
+ 	 */
+ 	program.removeWindow = function(id)
+ 	{
+ 		var _layer = program.list[id].layer,
+ 			_task = program.list[id].taskProgram;
+
+ 		// Remove selection
+ 		if(program.selected == id)
+ 		{
+ 			program.selected = false;
+ 		}
+
+ 		// Remove html object
+ 		_layer.parentNode.removeChild(_layer);
+ 		_task.parentNode.removeChild(_task);
+
+ 		// Remove object
+ 		delete program.list[id];
+ 	}
+
+
+ 	/**
+ 	 *	Minimize window
+ 	 */
+ 	program.minimizeWindow = function(id)
+ 	{
+ 		var o = program.list[id];
+ 		var _layer = o.layer;
+
+ 		// Edit object
+ 		o.isMinimized = true;
+
+ 		// Remove selection
+ 		program.removeSelection();
+
+ 		// Edit HTML
+ 		_layer.className += ' program--minimized';
+ 	}
+
+
+ 	/**
+ 	 *	Reminimize window
+ 	 */
+ 	program.reminizedWindow = function(id)
+ 	{
+ 		var o = program.list[id];
+ 		var _layer = o.layer;
+
+ 		// Edit object
+ 		o.isMinimized = false;
+
+ 		// Remove selection
+ 		program.setSelection(id);
+
+ 		// Edit HTML
+ 		_layer.className = _layer.className.replace(' program--minimized', ' program--reminimized');
+
+ 		// Delete reminimized class
+ 		setTimeout(function()
+ 		{
+ 			_layer.className = _layer.className.replace(' program--reminimized', '');
+ 		}, 550);
+ 	}
+
+
+ 	/**
+ 	 *	Remove selection
+ 	 */
+ 	program.removeSelection = function()
+ 	{
+ 		if(program.selected)
+ 		{
+ 			var o 			= program.list[program.selected],
+ 				_layer 		= o.layer,
+ 				_task 		= o.taskProgram;
+
+ 			// Edit object
+ 			o.isSelected = false;
+
+ 			// Remove selection class
+ 			_layer.className = _layer.className.replace(' program--selected', '');
+ 			_task.className = _task.className.replace(' taskline__program--selected', '');
+
+ 			// Remove selection
+ 			program.selected = false;
+ 		}
+ 	}
+
+
+ 	/**
+ 	 *	Set selection
+ 	 */
+ 	program.setSelection = function(selectNr)
+ 	{
+ 		if(
+ 			program.list[selectNr] &&
+ 			selectNr !== program.selected
+ 		)
+ 		{
+ 			var o 			= program.list[selectNr],
+ 				_layer 		= o.layer,
+ 				_task 		= o.taskProgram;
+
+ 			// Delete selections
+ 			program.removeSelection();
+
+ 			// Edit object
+ 			o.isSelected = true;
+
+ 			// Set new z-index
+ 			program.counter++;
+ 			_layer.style.zIndex = program.counter;
+
+ 			// Set selection class
+ 			_layer.className += ' program--selected';
+ 			_task.className += ' taskline__program--selected';
+
+ 			// Set global selection
+ 			program.selected = selectNr;
+ 		}
+ 	}
+
+
+	/**
+	 *	Maximize window to the screen size
+	 */
+	program.maximizeWindow = function(id)
+	{
+		var o = program.list[id];
+
+		if(!o.isMaximize)
+		{
+			// Set is variable to true
+			o.isMaximize = true;
+
+			// Save current window size
+			o.windowsSize = {
+				x: o.layer.offsetWidth,
+				y: o.layer.offsetHeight
+			}
+
+			// Save window position
+			o.windowPos = {
+				x: o.layer.offsetLeft,
+				y: o.layer.offsetTop
+			}
+
+			o.layer.className += ' program--maximize';
+		}
+	}
+
+
+	/**
+	 *	Reduce window size to the original window size
+	 */
+	program.reduceWindow = function(id)
+	{
+		var o = program.list[id],
+			oldWindowsSize = o.windowsSize,
+			oldWindowsPos = o.windowPos;
+
+		if(o.isMaximize)
+		{
+			o.isMaximize = false;
+
+			// Delete class
+			o.layer.className = o.layer.className.replace(' program--maximize', '');
+
+			// Set new position
+			if(oldWindowsPos)
+			{
+				o.layer.style.left = oldWindowsPos.x;
+				o.layer.style.top = oldWindowsPos.y;
+			}
+
+
+			// Set new size
+			if(oldWindowsSize)
+			{
+				o.layer.style.width = oldWindowsPos.x;
+				o.layer.style.height = oldWindowsPos.y;
+			}
+		}
+	}
 
 
 
@@ -116,17 +328,6 @@
 	 */
 	function createWindow(o)
 	{
-		// Create a google font icon
-		function createFontIcon(fontType)
-		{
-			o.headerCloseImg = document.createElement('i');
-			o.headerCloseImg.className = 'material-icons';
-			o.headerCloseImg.innerHTML = fontType;
-
-			return o.headerCloseImg;
-		}
-
-
 		var tmpl = document.querySelector('#programs [program="' + o.id_program + '"]');
 
 		o.layer = document.createElement('div');
@@ -142,6 +343,19 @@
 		o.headerTitle = document.createElement('div');
 		o.headerTitle.className = 'program__title';
 		o.headerTitle.innerHTML = o.title;
+		o.headerTitle.ondblclick = function()
+		{
+			// Disabled global click event
+			program.disableClickEvent = true;
+
+			if(o.isMaximize)
+			{
+				program.reduceWindow(o.id_counter);
+			}
+			else {
+				program.maximizeWindow(o.id_counter);
+			}
+		}
 		o.header.appendChild(o.headerTitle);
 
 		o.headerRight = document.createElement('div');
@@ -156,10 +370,31 @@
 			// Disabled global click event
 			program.disableClickEvent = true;
 
-			minimizeWindow(o.id_counter);
+			taskline.minimizeWindow(o.id_counter);
+			program.minimizeWindow(o.id_counter);
 		}
 		o.headerRight.appendChild(o.headerMinimize);
 		o.headerMinimize.appendChild(createFontIcon('remove'));
+
+		// Max-min Btn
+		o.headerMaxMinimize = document.createElement('div');
+		o.headerMaxMinimize.className = 'program__headerBtn program__headerBtn--maxminmize';
+		o.headerMaxMinimize.onclick = function()
+		{
+			// Disabled global click event
+			program.disableClickEvent = true;
+
+			if(o.isMaximize)
+			{
+				program.reduceWindow(o.id_counter);
+			}
+			else {
+				program.maximizeWindow(o.id_counter);
+			}
+		}
+		o.headerRight.appendChild(o.headerMaxMinimize);
+		o.headerMaxMinimize.appendChild(createFontIcon('crop_5_4', 'goToBig'));
+		o.headerMaxMinimize.appendChild(createFontIcon('filter_none', 'goToSmall'));
 
 		// Close Btn
 		o.headerClose = document.createElement('div');
@@ -169,7 +404,7 @@
 			// Disabled global click event
 			program.disableClickEvent = true;
 
-			removeWindow(o.id_counter);
+			program.removeWindow(o.id_counter);
 		}
 		o.headerRight.appendChild(o.headerClose);
 		o.headerClose.appendChild(createFontIcon('close'));
@@ -178,205 +413,6 @@
 		o.content = tmpl.cloneNode(true);
 		o.content.className = 'program__content';
 		o.layer.appendChild(o.content);
-	}
-
-	/**
- 	 *	Add a new program to taskline
- 	 */
- 	function createTaskProgram(o)
- 	{
- 		o.taskProgram = document.createElement('li');
- 		o.taskProgram.program_id = o.id_counter;
-		o.taskProgram.onclick = function(event)
-		{
-			program.disableClickEvent = true;
-
-			// Check is this minimized
-			if(o.isMinimized)
-			{
-				reminizedWindow(o.id_counter);
-			}
-
-			// Check ist selected
-			else if(o.isSelected)
-			{
-				minimizeWindow(o.id_counter);
-			}
-
-			// Set a new selection
-			else {
-				// Set new selection
-				setSelection(o.id_counter);
-			}
-		}
- 		o.taskProgram.className = 'taskline__program';
-
- 		// Value
- 		o.taskName = document.createElement('div');
- 		o.taskName.className = 'taskline__programTxt';
- 		o.taskName.innerHTML = o.title;
- 		o.taskProgram.appendChild(o.taskName);
-
-		// Taskmenu
-		o.taskMenu = document.createElement('div');
-		o.taskMenu.className = 'taskline__programMenu';
-		o.taskProgram.appendChild(o.taskMenu);
-
-		o.taskMenuClose = document.createElement('div');
-		o.taskMenuClose.className = 'taskline__programMenuBtn taskline__programMenuBtn--close';
-		o.taskMenuClose.onclick = function()
-		{
-			removeWindow(o.id_counter);
-		}
-		o.taskMenu.appendChild(o.taskMenuClose);
-
-		o.taskMenuCloseIcon = document.createElement('i');
-		o.taskMenuCloseIcon.className = 'material-icons';
-		o.taskMenuCloseIcon.innerHTML = 'close';
-		o.taskMenuClose.appendChild(o.taskMenuCloseIcon);
-
- 		// Output
- 		taskline.obj.program_open.appendChild(o.taskProgram);
- 	}
-
-
-	/**
-	 *	Get current selected window
-	 */
-	function getSelectedWindow()
-	{
-		if(program.selected)
-		{
-			return program.list[program.selected];
-		}
-		else {
-			return false;
-		}
-	}
-
-
-	/**
-	 *	Close window
-	 */
-	function removeWindow(id)
-	{
-		var _layer = program.list[id].layer,
-			_task = program.list[id].taskProgram;
-
-		// Remove selection
-		if(program.selected == id)
-		{
-			program.selected = false;
-		}
-
-		// Remove html object
-		_layer.parentNode.removeChild(_layer);
-		_task.parentNode.removeChild(_task);
-
-		// Remove object
-		delete program.list[id];
-	}
-
-
-	/**
-	 *	Minimize window
-	 */
-	function minimizeWindow(id)
-	{
-		var o = program.list[id];
-		var _layer = o.layer;
-
-		// Edit object
-		o.isMinimized = true;
-
-		// Remove selection
-		removeSelection();
-
-		// Edit HTML
-		_layer.className += ' program--minimized';
-	}
-
-
-	/**
-	 *	Reminimize window
-	 */
-	function reminizedWindow(id)
-	{
-		var o = program.list[id];
-		var _layer = o.layer;
-
-		// Edit object
-		o.isMinimized = false;
-
-		// Remove selection
-		setSelection(id);
-
-		// Edit HTML
-		_layer.className = _layer.className.replace(' program--minimized', ' program--reminimized');
-
-		// Delete reminimized class
-		setTimeout(function()
-		{
-			_layer.className = _layer.className.replace(' program--reminimized', '');
-		}, 550);
-	}
-
-
-	/**
-	 *	Remove selection
-	 */
-	function removeSelection()
-	{
-		if(program.selected)
-		{
-			var o 			= program.list[program.selected],
-				_layer 		= o.layer,
-				_task 		= o.taskProgram;
-
-			// Edit object
-			o.isSelected = false;
-
-			// Remove selection class
-			_layer.className = _layer.className.replace(' program--selected', '');
-			_task.className = _task.className.replace(' taskline__program--selected', '');
-
-			// Remove selection
-			program.selected = false;
-		}
-	}
-
-
-	/**
-	 *	Set selection
-	 */
-	function setSelection(selectNr)
-	{
-		if(
-			program.list[selectNr] &&
-			selectNr !== program.selected
-		)
-		{
-			var o 			= program.list[selectNr],
-				_layer 		= o.layer,
-				_task 		= o.taskProgram;
-
-			// Delete selections
-			removeSelection();
-
-			// Edit object
-			o.isSelected = true;
-
-			// Set new z-index
-			program.counter++;
-			_layer.style.zIndex = program.counter;
-
-			// Set selection class
-			_layer.className += ' program--selected';
-			_task.className += ' taskline__program--selected';
-
-			// Set global selection
-			program.selected = selectNr;
-		}
 	}
 
 
@@ -403,7 +439,8 @@
 				)
 				{
 					// Remove selection
-					removeSelection();
+					program.removeSelection();
+					taskline.removeSelection();
 				}
 
 				// Set program selection
@@ -412,7 +449,7 @@
 					parentProgram.program_id
 				)
 				{
-					setSelection(parentProgram.program_id);
+					program.setSelection(parentProgram.program_id);
 				}
 			}
 		});
@@ -473,6 +510,24 @@
 		// Add new position
 		obj.style.left = left + distance + 'px';
 		obj.style.top = top + distance + 'px';
+	}
+
+
+	/**
+	 *	Create a google font icon
+	 */
+	function createFontIcon(fontType, addClass)
+	{
+		var iconfontObj = document.createElement('i');
+		iconfontObj.className = 'material-icons';
+		iconfontObj.innerHTML = fontType;
+
+		if(addClass)
+		{
+			iconfontObj.className += ' ' + addClass;
+		}
+
+		return iconfontObj;
 	}
 
 

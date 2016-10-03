@@ -29,6 +29,17 @@
 		transition: .3s;
 	}
 
+	&.program--maximize {
+		left: 0 !important;
+		top: 0 !important;
+		bottom: var(--taskline-height) !important;
+		right: 0 !important;
+		width: inherit !important;
+		height: inherit !important;
+		box-shadow: none;
+		border: 0;
+	}
+
 	& .program__header {
 		position: relative;
 		left: 0;
@@ -56,7 +67,8 @@
 	}
 
 	& .program__headerBtn {
-		display: inline-block;
+		display: block;
+		float: left;
 		width: 33.333%;
 		height: 100%;
 		color: #ccc;
@@ -70,6 +82,20 @@
 			&:hover {
 				color: #fff;
 				background-color: var(--color-red);
+			}
+		}
+
+		&.program__headerBtn--maxminmize {
+			& .material-icons {
+				&.goToSmall {
+					line-height: 32px;
+					font-size: 19px;
+					display: none;
+				}
+
+				&.goToBig {
+					font-size: 19px;
+				}
 			}
 		}
 	}
