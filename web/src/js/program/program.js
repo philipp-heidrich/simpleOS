@@ -335,15 +335,35 @@
 		o.layer.setAttribute('data-program-id', o.id_counter);
 		o.layer.className = 'program';
 
+		o.resizeArea = document.createElement('div');
+		o.resizeArea.className = 'program__resizeArea';
+		o.layer.appendChild(o.resizeArea);
+
+		// Resize - top
+		createResizeDiv('top', o);
+		createResizeDiv('right', o);
+		createResizeDiv('bottom', o);
+		createResizeDiv('left', o);
+		createResizeDiv('rightTop', o);
+		createResizeDiv('rightBottom', o);
+		createResizeDiv('leftBottom', o);
+		createResizeDiv('leftTop', o);
+
 		// Header
 		o.header = document.createElement('div');
 		o.header.className = 'program__header';
 		o.layer.appendChild(o.header);
 
-		o.headerTitle = document.createElement('div');
-		o.headerTitle.className = 'program__title';
-		o.headerTitle.innerHTML = o.title;
-		o.headerTitle.ondblclick = function()
+		// Header - move
+		o.headerMove = document.createElement('div');
+		o.headerMove.className = 'program__move';
+		o.headerMove.onmousedown = function(event)
+		{
+			// Disabled global click event
+			program.disableClickEvent = true;
+			startWindowMovment(event, o.id_counter);
+		}
+		o.headerMove.ondblclick = function()
 		{
 			// Disabled global click event
 			program.disableClickEvent = true;
@@ -356,6 +376,12 @@
 				program.maximizeWindow(o.id_counter);
 			}
 		}
+		o.header.appendChild(o.headerMove);
+
+		// Header - title
+		o.headerTitle = document.createElement('div');
+		o.headerTitle.className = 'program__title';
+		o.headerTitle.innerHTML = o.title;
 		o.header.appendChild(o.headerTitle);
 
 		o.headerRight = document.createElement('div');
@@ -393,8 +419,7 @@
 			}
 		}
 		o.headerRight.appendChild(o.headerMaxMinimize);
-		o.headerMaxMinimize.appendChild(createFontIcon('crop_5_4', 'goToBig'));
-		o.headerMaxMinimize.appendChild(createFontIcon('filter_none', 'goToSmall'));
+		o.headerMaxMinimize.appendChild(createFontIcon('crop_5_4'));
 
 		// Close Btn
 		o.headerClose = document.createElement('div');
@@ -421,7 +446,7 @@
 	 */
 	function addEvents()
 	{
-		// Globaler Click event
+		// Global click event
 		document.addEventListener('click', function(event)
 		{
 			if(program.disableClickEvent)
@@ -452,6 +477,21 @@
 					program.setSelection(parentProgram.program_id);
 				}
 			}
+		});
+
+
+		// Global mousemove event
+		window.addEventListener('mousemove', function(event)
+		{
+			moveWindowMovment(event);
+			moveWindowResize(event);
+		});
+
+		// Global mouseup event
+		window.addEventListener('mouseup', function(event)
+		{
+			stopWindowMovment(event),
+			stopWindowResize(event);
 		});
 	}
 
@@ -528,6 +568,342 @@
 		}
 
 		return iconfontObj;
+	}
+
+
+	/**
+	 *	Create resize div
+	 */
+	function createResizeDiv(type, o)
+	{
+		var id = 'changeSize_' + type;
+
+		o[id] = document.createElement('div');
+		o[id].className = 'program__changeSize';
+		o[id].setAttribute('data-position', type);
+		o[id].onmousedown = function(event)
+		{
+			// Disabled global click event
+			program.disableClickEvent = true;
+
+			// Start resize window size
+			startWindowResize(event, o.id_counter, type);
+		}
+		o.resizeArea.appendChild(o[id]);
+	}
+
+
+	/**
+	 *	Start window movement
+	 */
+	function startWindowMovment(event, id)
+	{
+		var o = program.list[id];
+
+		// If the window not maximized
+		if(
+			!o.isMovment &&
+			!o.isMaximize
+		)
+		{
+			// Set new selection
+			program.setSelection(id);
+
+			// Set global movment variable
+			program.isMovment = id;
+
+			// Set is movment to true
+			o.isMovment = true;
+
+			// Set start momvment variable
+			o.moveStartClient = {
+				x: event.clientX,
+				y: event.clientY
+			}
+
+			// Set start momvment variable
+			o.moveStartObj = {
+				x: o.layer.offsetLeft,
+				y: o.layer.offsetTop,
+				w: o.layer.offsetWidth,
+				h: o.layer.offsetHeight
+			}
+		}
+	}
+
+
+	/**
+	 *	Move window movment
+	 */
+	function moveWindowMovment(event)
+	{
+		var id = program.isMovment;
+
+		// Check if this on movment
+		if(
+			id &&
+			program.list[id] &&
+			program.list[id].isMovment
+		)
+		{
+			var o 				= program.list[id],
+				startMove 		= o.moveStart,
+				moveDistanceX	= event.clientX - o.moveStartClient.x,
+				moveDistanceY	= event.clientY - o.moveStartClient.y,
+				moveStartX 		= o.moveStartObj.x,
+				moveStartY 		= o.moveStartObj.y;
+
+			var left 	= moveStartX + moveDistanceX,
+				top 	= moveStartY + moveDistanceY,
+				width 	= o.moveStartObj.w,
+				height 	= o.moveStartObj.h;
+
+			// Check is the window outside from the browser x
+			if(left < 0)
+			{
+				setWindowPosition(0, null, o.layer);
+			}
+			else if(window.innerWidth < left + width)
+			{
+				setWindowPosition(window.innerWidth - width, null, o.layer);
+			}
+			else
+			{
+				setWindowPosition(o.moveStartObj.x + moveDistanceX, null, o.layer);
+			}
+
+			// Check is the window outside from the browser y
+			if(top < 0)
+			{
+				setWindowPosition(null, 0, o.layer);
+			}
+			else if(window.innerHeight < top + height)
+			{
+				setWindowPosition(null, window.innerHeight - height, o.layer);
+			}
+			else
+			{
+				setWindowPosition(null, o.moveStartObj.y + moveDistanceY, o.layer);
+			}
+		}
+	}
+
+
+	/**
+	 *	Stop window movment
+	 */
+	function stopWindowMovment(event)
+	{
+		var id = program.isMovment;
+
+		// Check if this on movment
+		if(
+			id &&
+			program.list[id] &&
+			program.list[id].isMovment
+		)
+		{
+			var o = program.list[id];
+
+			// Reset object variable
+			o.isMovment = false;
+
+			// Reset globale variable
+			program.isMovment = false;
+		}
+	}
+
+
+	/**
+	 *	Start the resize window
+	 */
+	function startWindowResize(event, id, type)
+	{
+		var o = program.list[id];
+
+		// If the window not maximized
+		if(
+			!o.isResize &&
+			!o.isMaximize
+		)
+		{
+			// Set new selection
+			program.setSelection(id);
+
+			// Set global movment variable
+			program.isResize = id;
+
+			// Set is movment to true
+			o.isResize = true;
+			o.resizeType = type;
+
+			// Set start momvment variable
+			o.moveStart = {
+				x: event.clientX,
+				y: event.clientY,
+				w: o.layer.offsetWidth,
+				h: o.layer.offsetHeight
+			}
+		}
+	}
+
+
+	/**
+	 *	Move resize window
+	 */
+	function moveWindowResize(event)
+	{
+		var id = program.isResize;
+
+		if(
+			id &&
+			program.list[id] &&
+			program.list[id].isResize
+		)
+		{
+			var o = program.list[id],
+				type = o.resizeType,
+				moveDistanceX = event.clientX - o.moveStart.x,
+				moveDistanceY = event.clientY - o.moveStart.y;
+
+			var moveStartX = o.moveStart.x,
+				moveStartY = o.moveStart.y,
+				moveStartW = o.moveStart.w,
+				moveStartH = o.moveStart.h,
+				width = (moveStartX + moveDistanceX + moveStartW - moveDistanceX) - (moveStartX + moveDistanceX),
+				height = (moveStartY + moveDistanceY + moveStartH - moveDistanceY) - (moveStartY + moveDistanceY);
+
+			switch(type)
+			{
+				case 'top':
+					setWindowPosition(null, moveStartY + moveDistanceY, o.layer);
+					setWindowSize(null, moveStartH - moveDistanceY, o.layer);
+					break;
+
+				case 'rightTop':
+					setWindowSize(moveStartW + moveDistanceX, null, o.layer);
+
+					if(height > 100)
+					{
+						setWindowPosition(null, moveStartY + moveDistanceY, o.layer);
+						setWindowSize(null, moveStartH - moveDistanceY, o.layer);
+					}
+
+					break;
+
+				case 'left':
+					setWindowPosition(moveStartX + moveDistanceX, null, o.layer);
+					setWindowSize(moveStartW - moveDistanceX, null, o.layer);
+					break;
+
+				case 'rightBottom':
+					setWindowSize(moveStartW + moveDistanceX, null, o.layer);
+
+					if(height > 100)
+					{
+						setWindowSize(null, moveStartH + moveDistanceY, o.layer);
+					}
+
+					break;
+
+				case 'right':
+					setWindowSize(moveStartW + moveDistanceX, null, o.layer);
+					break;
+
+				case 'leftBottom':
+					setWindowSize(null, moveStartH + moveDistanceY, o.layer);
+
+					if(width > 180)
+					{
+						setWindowPosition(moveStartX + moveDistanceX, null, o.layer);
+						setWindowSize(moveStartW - moveDistanceX, null, o.layer);
+					}
+					break;
+
+				case 'bottom':
+					setWindowSize(null, moveStartH + moveDistanceY, o.layer);
+					break;
+
+				case 'leftTop':
+					if(width > 180)
+					{
+						setWindowPosition(moveStartX + moveDistanceX, null, o.layer);
+						setWindowSize(moveStartW - moveDistanceX, null, o.layer);
+					}
+
+					if(height > 100)
+					{
+						setWindowPosition(null, moveStartY + moveDistanceY, o.layer);
+						setWindowSize(null, moveStartH - moveDistanceY, o.layer);
+					}
+
+					break;
+			}
+		}
+	}
+
+
+	/**
+	 *	End resize window
+	 */
+	function stopWindowResize(event)
+	{
+		var id = program.isResize;
+
+		if(
+			id &&
+			program.list[id] &&
+			program.list[id].isResize
+		)
+		{
+			var o = program.list[id];
+
+			// Set global movment variable
+			program.isResize = false;
+
+			// Set is movment to true
+			o.isResize = false;
+		}
+	}
+
+
+	/**
+	 *	Set new window position
+	 */
+	function setWindowPosition(x, y, obj)
+	{
+		if(x !== null)
+		{
+			obj.style.left = x + 'px';
+		}
+
+		if(y !== null)
+		{
+			obj.style.top = y + 'px';
+		}
+	}
+
+
+	/**
+	 *	Set new window size
+	 */
+	function setWindowSize(x, y, obj)
+	{
+		if(
+			x !== null &&
+			x > 180
+		)
+		{
+			obj.style.width = x + 'px';
+		}
+
+		if(
+			y !== null &&
+			y > 100
+		)
+		{
+			obj.style.height = y + 'px';
+		}
 	}
 
 

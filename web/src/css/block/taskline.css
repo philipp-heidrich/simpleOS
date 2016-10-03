@@ -1,5 +1,6 @@
 .taskline {
 	position: absolute;
+	z-index: 4;
 	left: 0;
 	bottom: 0;
 	width: 100%;
