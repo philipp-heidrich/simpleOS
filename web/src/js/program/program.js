@@ -87,6 +87,9 @@
 			setNewWindowPosition(o.layer, pos_x, pos_y);
 		}
 
+		// Disalbe global click event
+		program.disableClickEvent = true;
+
 		// Add this object to global array
 		program.list[o.id_counter] = o;
 
@@ -97,12 +100,8 @@
 		program.counter++;
 		o.layer.style.zIndex = program.counter;
 
-		// Time delay
-		setTimeout(function()
-		{
-			// Set to selected
-			program.setSelection(o.id_counter);
-		}, 10);
+		// Set to selected
+		program.setSelection(o.id_counter);
 
 		return o;
 	}
