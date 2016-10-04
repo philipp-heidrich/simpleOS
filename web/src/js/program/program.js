@@ -11,7 +11,7 @@
 
 
 
-	
+
 
 
 
@@ -93,14 +93,16 @@
 		// Add program to desktop
 		desktop.obj.program.appendChild(o.layer);
 
+		// Set new z-index
+		program.counter++;
+		o.layer.style.zIndex = program.counter;
+
 		// Time delay
 		setTimeout(function()
 		{
-			o.layer.style.opacity = 1;
-
 			// Set to selected
 			program.setSelection(o.id_counter);
-		}, 100);
+		}, 10);
 
 		return o;
 	}
@@ -168,7 +170,8 @@
  		// Remove selection
  		program.removeSelection();
 
- 		// Edit HTML
+		// Edit HTML
+		_layer.className = _layer.className.replace(' program--maximize', '');
  		_layer.className += ' program--minimized';
  	}
 
@@ -189,6 +192,11 @@
 
  		// Edit HTML
  		_layer.className = _layer.className.replace(' program--minimized', ' program--reminimized');
+
+		if(o.isMaximize)
+		{
+			_layer.className += ' program--maximize';
+		}
 
  		// Delete reminimized class
  		setTimeout(function()
@@ -398,7 +406,6 @@
 
 		o.layer = document.createElement('div');
 		o.layer.program_id = o.id_counter;
-		o.layer.style.opacity = 0;
 		o.layer.setAttribute('data-program-id', o.id_counter);
 		o.layer.className = 'program';
 
