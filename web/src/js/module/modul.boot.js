@@ -18,6 +18,7 @@
 			register.boot,
 			login.boot,
 			desktop.boot,
+			class_storage.boot,
 			taskline.boot,
 			startmenu.boot,
 			program.boot

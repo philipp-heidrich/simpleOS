@@ -25,6 +25,20 @@
 			case option.globalParam + '_account_users':
 				defaultItem = {};
 				break
+
+			// Filesystem
+			case option.globalParam + '_storage_filesys':
+				defaultItem = [{
+					"type": "dir",
+					"name": "home",
+					"dir": [{
+						"type": "dir",
+						"name": "admin"
+					}]
+				}, {
+					"type": "dir",
+					"name": "var"
+				}];
 		}
 
 		// Gebe default Wert zurück
