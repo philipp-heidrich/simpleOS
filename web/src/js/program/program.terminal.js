@@ -204,6 +204,15 @@
 			{
 				printHistory(app.echo, o);
 			}
+			else if(app.run)
+			{
+				var array = app.run();
+
+				for(var _item in array)
+				{
+					printHistory(array[_item], o);
+				}
+			}
 		}
 
 		// No valid app found
@@ -290,7 +299,7 @@
 
 		var path = document.createElement('div');
 		path.className = 'terminal__path';
-		path.innerHTML = '~';
+		path.innerHTML = class_storage.getCurrentPath();
 		block.appendChild(path);
 
 		return block;
@@ -304,7 +313,21 @@
 	{
 		var commands = {
 			help: {
-				echo: ''
+				echo: ['ls']
+			},
+			ls: {
+				run: function()
+				{
+					var ls = class_storage.showAll(),
+						array = [];
+
+					for(var _item in ls)
+					{
+						array.push(_item + '\t[' + [ls[_item].type] + ']');
+					}
+
+					return array;
+				}
 			}
 		}
 

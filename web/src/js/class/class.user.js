@@ -49,6 +49,10 @@
 		// Save new account array
 		option.save('account_users', allAccounts);
 
+		// Save new files + dirs content
+		class_storage.createDir('/home/' + id);
+		class_storage.createFile('/home/' + id, '.bash_history', '');
+
 		return true;
 	}
 
