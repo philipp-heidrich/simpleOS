@@ -1,0 +1,69 @@
+.terminal {
+	background-color: var(--console-background);
+	color: var(--console-color);
+	font-family: var(--console-font);
+	font-size: .9rem;
+	padding: 3px 7px;
+	user-select: text;
+	cursor: text;
+	overflow-y: auto;
+
+	& .terminal__historyLi {
+		position: relative;
+		user-select: text;
+		cursor: text;
+
+		&.terminal__historyLi--newblock {
+			margin-top: 6px;
+		}
+	}
+
+	& .terminal__icon {
+		position: absolute;
+		left: 0;
+		top: 0;
+	}
+
+	& .terminal__value {
+		padding-left: 17px;
+		user-select: text;
+		cursor: text;
+	}
+
+	& .terminal__inputField {
+		position: relative;
+		margin-top: 6px;
+	}
+
+	& .terminal__ownerArea {
+		padding-top: 3px;
+
+		&:after {
+			display: block;
+			content: '';
+			clear: both;
+		}
+	}
+
+	& .terminal__user,
+	& .terminal__path,
+	& .terminal__sign {
+		float: left;
+		margin-right: 7px;
+		color: #20b7f3;
+	}
+
+	& .terminal__user {
+		color: #2dd82d;
+	}
+
+	& .terminal__input {
+		position: relative;
+		cursor: text;
+	}
+
+	& .terminal__inputArea {
+		position: relative;
+		padding-left: 17px;
+	}
+}

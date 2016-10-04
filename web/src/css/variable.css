@@ -3,6 +3,10 @@
 
 	--taskline-height: 44px;
 
+	--console-color: #fff;
+	--console-background: #313131;
+	--console-font: 'Hack', monsopace;
+
 	--transition-art: cubic-bezier(.215,.665,.11,.9);
 
 	/* Breakpoints */

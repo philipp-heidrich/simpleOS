@@ -5,7 +5,7 @@
 	bottom: 0;
 	width: 100%;
 	height: var(--taskline-height);
-	background-color: rgba(0, 0, 0, .3);
+	background-color: #3c3c3c;
 
 	& .taskline__start {
 		position: absolute;

@@ -11,6 +11,9 @@
 
 
 
+	
+
+
 
 	/**
 	 *
@@ -87,15 +90,19 @@
 		// Add this object to global array
 		program.list[o.id_counter] = o;
 
+		// Add program to desktop
+		desktop.obj.program.appendChild(o.layer);
+
 		// Time delay
 		setTimeout(function()
 		{
-			// Add program to desktop
-			desktop.obj.program.appendChild(o.layer);
+			o.layer.style.opacity = 1;
 
 			// Set to selected
 			program.setSelection(o.id_counter);
 		}, 100);
+
+		return o;
 	}
 
 
@@ -274,6 +281,12 @@
 			}
 
 			o.layer.className += ' program--maximize';
+
+			// Run all extern maximize functions
+			for(var i = 0; i < o.pushMaximizedArray.length; i++)
+			{
+				o.pushMaximizedArray[i]();
+			}
 		}
 	}
 
@@ -301,14 +314,67 @@
 				o.layer.style.top = oldWindowsPos.y;
 			}
 
-
 			// Set new size
 			if(oldWindowsSize)
 			{
 				o.layer.style.width = oldWindowsPos.x;
 				o.layer.style.height = oldWindowsPos.y;
 			}
+
+			// Run all extern reduce functions
+			for(var i = 0; i < o.pushReduceArray.length; i++)
+			{
+				o.pushReduceArray[i]();
+			}
 		}
+	}
+
+
+	/**
+	 *	Push window resize function
+	 */
+	program.pushResizeFunction = function(id, func)
+	{
+		var o = program.list[id];
+
+		if(!o.pushResizeArray)
+		{
+			o.pushResizeArray = [];
+		}
+
+		o.pushResizeArray.push(func);
+	}
+
+
+	/**
+	 *	Push window maximized function
+	 */
+	program.pushMaximizedFunction = function(id, func)
+	{
+		var o = program.list[id];
+
+		if(!o.pushMaximizedArray)
+		{
+			o.pushMaximizedArray = [];
+		}
+
+		o.pushMaximizedArray.push(func);
+	}
+
+
+	/**
+	 *	Push window maximized function
+	 */
+	program.pushReduceFunction = function(id, func)
+	{
+		var o = program.list[id];
+
+		if(!o.pushReduceArray)
+		{
+			o.pushReduceArray = [];
+		}
+
+		o.pushReduceArray.push(func);
 	}
 
 
@@ -332,6 +398,7 @@
 
 		o.layer = document.createElement('div');
 		o.layer.program_id = o.id_counter;
+		o.layer.style.opacity = 0;
 		o.layer.setAttribute('data-program-id', o.id_counter);
 		o.layer.className = 'program';
 
@@ -388,7 +455,7 @@
 		o.headerRight.className = 'program__headerRight';
 		o.header.appendChild(o.headerRight);
 
-		// Minimze Btn
+		// Header - Minimze Btn
 		o.headerMinimize = document.createElement('div');
 		o.headerMinimize.className = 'program__headerBtn program__headerBtn--mini';
 		o.headerMinimize.onclick = function()
@@ -402,7 +469,7 @@
 		o.headerRight.appendChild(o.headerMinimize);
 		o.headerMinimize.appendChild(createFontIcon('remove'));
 
-		// Max-min Btn
+		// Header - Max-min Btn
 		o.headerMaxMinimize = document.createElement('div');
 		o.headerMaxMinimize.className = 'program__headerBtn program__headerBtn--maxminmize';
 		o.headerMaxMinimize.onclick = function()
@@ -421,7 +488,7 @@
 		o.headerRight.appendChild(o.headerMaxMinimize);
 		o.headerMaxMinimize.appendChild(createFontIcon('crop_5_4'));
 
-		// Close Btn
+		// Header - Close Btn
 		o.headerClose = document.createElement('div');
 		o.headerClose.className = 'program__headerBtn program__headerBtn--close';
 		o.headerClose.onclick = function()
@@ -436,7 +503,7 @@
 
 		// Content
 		o.content = tmpl.cloneNode(true);
-		o.content.className = 'program__content';
+		o.content.className = 'program__content ' + o.id_program;
 		o.layer.appendChild(o.content);
 	}
 
@@ -838,6 +905,12 @@
 					}
 
 					break;
+			}
+
+			// Run all resize functions
+			for(var i = 0; i < o.pushResizeArray.length; i++)
+			{
+				o.pushResizeArray[i]();
 			}
 		}
 	}

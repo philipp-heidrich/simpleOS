@@ -3,9 +3,9 @@
 	z-index: 2 !important;
 	width: 100%;
 	height: 100%;
-	background-color: #313131;
-	color: #fff;
-	font-family: 'Hack', monsopace;
+	background-color: var(--console-background);
+	color: var(--console-color);
+	font-family: var(--console-font);
 
 	& .boot__scroller {
 		z-index: 2;

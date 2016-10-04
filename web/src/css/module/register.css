@@ -21,7 +21,8 @@
 			clear: both;
 		}
 
-		&.register__block--pwd {
+		&.register__block--pwd,
+		&.register__block--pcName {
 			margin-top: 60px;
 		}
 	}

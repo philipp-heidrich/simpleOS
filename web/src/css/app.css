@@ -31,3 +31,8 @@
 @import 'block/startmenu.css';
 @import 'block/program.css';
 @import 'block/taskline.css';
+
+
+/* @import program
+---------------------------------------------------------------*/
+@import 'program/terminal.css';

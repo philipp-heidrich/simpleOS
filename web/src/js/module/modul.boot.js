@@ -27,7 +27,7 @@
 		function()
 		{
 			// Check is this the first visit
-			if(os.getFirstPcVisit())
+			if(class_os.getFirstPcVisit())
 			{
 				setTimeout(register.init, 500);
 			}

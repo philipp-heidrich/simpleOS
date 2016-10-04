@@ -1,6 +1,6 @@
 (function()
 {
-	this.os = {
+	this.class_os = {
 		AUTHOR: 'Philipp Heidrich'
 	}
 
@@ -14,7 +14,7 @@
 	/**
 	 *	Save first pc visit
 	 */
-	os.saveFirstPcVisit = function()
+	class_os.saveFirstPcVisit = function()
 	{
 		option.save('os_firstVisit', true);
 
@@ -25,7 +25,7 @@
 	/**
 	 *	Get first pc visit
 	 */
-	os.getFirstPcVisit = function()
+	class_os.getFirstPcVisit = function()
 	{
 		if(
 			!option.load('os_firstVisit') ||
@@ -44,10 +44,19 @@
 	/**
 	 *	Save pc name
 	 */
-	os.savePcName = function(name)
+	class_os.savePcName = function(name)
 	{
 		// Save pc name
 		option.save('os_name', name);
+	}
+
+
+	/**
+	 *	Get pc name
+	 */
+	class_os.getPcName = function()
+	{
+		return option.load('os_name');
 	}
 
 }).call(this);

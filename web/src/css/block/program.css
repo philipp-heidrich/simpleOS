@@ -34,8 +34,8 @@
 		top: 0 !important;
 		bottom: var(--taskline-height) !important;
 		right: 0 !important;
-		width: inherit !important;
-		height: inherit !important;
+		width: auto !important;
+		height: auto !important;
 		box-shadow: none;
 		border: 0;
 	}
@@ -179,7 +179,7 @@
 	& .program__content {
 		position: absolute;
 		left: 0;
-		top: 30px;
+		top: 32px;
 		bottom: 0;
 		width: 100%;
 	}

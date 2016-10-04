@@ -46,12 +46,6 @@
 			return false;
 		});
 
-		// Username input
-		register.obj.input_name.addEventListener('keyup', function(event)
-		{
-			register.obj.input_pcName.value = convertPCname(register.obj.input_name.value);
-		});
-
 		// Next Button
 		register.obj.button_fin.addEventListener('click', function(event)
 		{
@@ -180,10 +174,10 @@
 		var pcname = convertPCname(register.obj.input_pcName.value);
 
 		// Save first pc visit
-		os.saveFirstPcVisit();
+		class_os.saveFirstPcVisit();
 
 		// Save PC name
-		os.savePcName(pcname);
+		class_os.savePcName(pcname);
 
 		return true;
 	}
