@@ -13,7 +13,6 @@ Open the web/build/debug/index.html in your browser
 
 
 
-License
-----
+### License
 
 MIT
