@@ -1,43 +1,40 @@
-(function()
+var program_terminal = function(fullscreen)
 {
-	this.program_terminal = {
+	// Create global object
+	var o = {
 		AUTHOR: 'Philipp Heidrich',
-		VERSION: 1
+		VERSION: 2,
+		pressedKeys: []
+	};
+
+	// Create window
+	o.progObj = program.startWindow('terminal', 'Terminal', fullscreen);
+
+	// Create terminal object
+	o.obj = {
+		terminal: o.progObj.content,
+		ownerArea: o.progObj.content.querySelector('.terminal__ownerArea'),
+		inputArea: o.progObj.content.querySelector('.terminal__inputArea'),
+		inputField: o.progObj.content.querySelector('.terminal__inputField'),
+		input: o.progObj.content.querySelector('.terminal__input'),
+		history: o.progObj.content.querySelector('.terminal__history'),
+		user: o.progObj.content.querySelector('.terminal__user'),
+		placeholder: o.progObj.content.querySelector('.terminal__placeholder')
 	}
 
-	program_terminal.pressedKeys = [];
+	// Add events
+	addEvent();
+
+	// Add terminal infos
+	addTerminalInfo();
+
+	// Add User
+	addUserToInput();
+
+	// Set focus
+	setFocusToInput();
 
 
-	/**
-	 *	Inital terminal
-	 */
-	program_terminal.init = function()
-	{
-		// Create html
-		this.progObj = program.startWindow('terminal', 'Terminal');
-
-		var _content = this.progObj.content;
-
-		this.obj = {
-			terminal: _content,
-			ownerArea: _content.querySelector('.terminal__ownerArea'),
-			inputArea: _content.querySelector('.terminal__inputArea'),
-			inputField: _content.querySelector('.terminal__inputField'),
-			input: _content.querySelector('.terminal__input'),
-			history: _content.querySelector('.terminal__history'),
-			user: _content.querySelector('.terminal__user'),
-			placeholder: _content.querySelector('.terminal__placeholder')
-		}
-
-		// Add events
-		addEvent(this);
-
-		// Add terminal infos
-		addTerminalInfo(this);
-
-		// Add User
-		addUserToInput(this);
-	}
 
 
 
@@ -52,42 +49,42 @@
 	/**
 	 *	Add events from the program
 	 */
-	function addEvent(o)
+	function addEvent()
 	{
 		// Click event to focus the input field
 		o.progObj.content.addEventListener('click', function()
 		{
-			setFocusToInput(o);
+			setFocusToInput();
 		});
 
 		// Keypress event
 		o.obj.input.addEventListener('keydown', function(event)
 		{
-			keypressConsole(event, o);
+			keypressConsole(event);
 		});
 
 		// Keypress event
 		o.obj.input.addEventListener('keyup', function(event)
 		{
-			keyupConsole(event, o);
+			keyupConsole(event);
 		});
 
 		// Push resize function
 		program.pushResizeFunction(o.progObj.id_counter, function()
 		{
-			scrollToBottom(o);
+			scrollToBottom();
 		});
 
 		// Push maximize function
 		program.pushMaximizedFunction(o.progObj.id_counter, function()
 		{
-			scrollToBottom(o);
+			scrollToBottom();
 		});
 
 		// Push reduce function
 		program.pushReduceFunction(o.progObj.id_counter, function()
 		{
-			scrollToBottom(o);
+			scrollToBottom();
 		});
 	}
 
@@ -95,7 +92,7 @@
 	/**
 	 *	Add user infos
 	 */
-	function addUserToInput(o)
+	function addUserToInput()
 	{
 		o.obj.inputField.insertBefore(createOwnerBlock(), o.obj.inputArea);
 	}
@@ -104,64 +101,72 @@
 	/**
 	 *	Add terminal info
 	 */
-	function addTerminalInfo(o)
+	function addTerminalInfo()
 	{
-		var terminalNote = 'webOS terminal - v.' + program_terminal.VERSION + '<br>' +
+		var terminalNote = 'webOS terminal - v.' + o.VERSION + '<br>' +
 							'using username "' + class_user.getCurrentUser() + '"<br>' +
 							'<br>' +
 							'This terminal program is an alpha version. All available commands can you see with "help"';
 
-		printHistory(terminalNote , o);
+		printHistory(terminalNote);
 	}
 
 
 	/**
 	 *	Set the focus to the input field
 	 */
-	function setFocusToInput(o)
+	function setFocusToInput()
 	{
-		var _input = o.obj.input,
-			text = _input.innerHTML;
+		var input = o.obj.input,
+			text = getInput();
 
-		_input.focus();
-		_input.innerHTML = _input.innerHTML;
+		input.focus();
+
+		setInput(text);
 	}
 
 
 	/**
 	 *	Keypress detection for console inputs
 	 */
-	function keypressConsole(event, o)
+	function keypressConsole(event)
 	{
 		var keycode = event.keyCode;
 
 		// Save keypress
-		program_terminal.pressedKeys[keycode] = true;
+		o.pressedKeys[keycode] = true;
 
 		// Key: ENTER
 		if(keycode == 13)
 		{
-			runCode(o);
+			runCode();
 			event.preventDefault();
 		}
 
 		// Key: CTRL + L
 		if(
-			program_terminal.pressedKeys[17] &&
+			o.pressedKeys[17] &&
 			keycode == 76
 		)
 		{
-			clearConsole(o);
+			clearConsole();
 			event.preventDefault();
 		}
 
 		// Key: CTRL + U
 		if(
-			program_terminal.pressedKeys[17] &&
+			o.pressedKeys[17] &&
 			keycode == 85
 		)
 		{
-			clearInput(o);
+			clearInput();
+			event.preventDefault();
+		}
+
+		// Key: TAB
+		if(keycode == 9)
+		{
+			tabFiles();
 			event.preventDefault();
 		}
 	}
@@ -170,13 +175,13 @@
 	/**
 	 *	Keyup detection for console inputs
 	 */
-	function keyupConsole(event, o)
+	function keyupConsole(event)
 	{
 		var keycode = event.keyCode;
 
-		if(program_terminal.pressedKeys[keycode])
+		if(o.pressedKeys[keycode])
 		{
-			program_terminal.pressedKeys[keycode] = false;
+			o.pressedKeys[keycode] = false;
 		}
 	}
 
@@ -184,56 +189,60 @@
 	/**
 	 *	Run code
 	 */
-	function runCode(o)
+	function runCode()
 	{
-		var _input = o.obj.input,
-			commandString = _input.innerHTML,
-			command = splitCommand(_input.innerHTML);
+		var input = o.obj.input,
+			commandString = getInput(),
+			command = splitCommand(commandString);
 
 		// Print owner
-		printOwnerToHisotry(o);
+		printOwnerToHisotry();
 
 		// Print command in history
-		printHistory(commandString, o, true);
+		printHistory(commandString, true);
 
-		// Search for a program
-		var app = getCommand(command);
-		if(app)
+		if(command.app)
 		{
-			if(app.echo)
+			// Search for a program
+			var app = getCommand(command);
+			if(app)
 			{
-				printHistory(app.echo, o);
-			}
-			else if(app.run)
-			{
-				var array = app.run();
-
-				for(var _item in array)
+				if(app.echo)
 				{
-					printHistory(array[_item], o);
+					printHistory(app.echo);
+				}
+				else if(app.run)
+				{
+					var appReturn = new app.run(o, command.params);
+
+					// Print
+					if(appReturn.print)
+					{
+						printHistory(appReturn.print);
+					}
 				}
 			}
-		}
 
-		// No valid app found
-		else
-		{
-			// Print command in history
-			printHistory('No application &raquo;' + commandString + '&laquo; found', o);
+			// No valid app found
+			else
+			{
+				// Print command in history
+				printHistory('No application &raquo;' + commandString + '&laquo; found');
+			}
 		}
 
 		// Clear input field
-		_input.innerHTML = '';
+		clearInput();
 
 		// Scroll to bottom
-		scrollToBottom(o);
+		scrollToBottom();
 	}
 
 
 	/**
 	 *	Print in the history
 	 */
-	function printHistory(text, o, printIcon)
+	function printHistory(text, printIcon)
 	{
 		if(
 			text ||
@@ -241,6 +250,9 @@
 		)
 		{
 			var history = o.obj.history;
+
+			// Replace placeholders
+			text = switchFromPlaceholder(text);
 
 			var li = document.createElement('li');
 			li.className = 'terminal__historyLi';
@@ -269,7 +281,7 @@
 	/**
 	 *	Print user to history
 	 */
-	function printOwnerToHisotry(o)
+	function printOwnerToHisotry()
 	{
 		var history = o.obj.history;
 
@@ -313,21 +325,13 @@
 	{
 		var commands = {
 			help: {
-				echo: ['ls']
+				echo: 'ls[BR]exit'
 			},
 			ls: {
-				run: function()
-				{
-					var ls = class_storage.showAll(),
-						array = [];
-
-					for(var _item in ls)
-					{
-						array.push(_item + '\t[' + [ls[_item].type] + ']');
-					}
-
-					return array;
-				}
+				run: program_terminal_ls
+			},
+			exit: {
+				run: program_terminal_exit
 			}
 		}
 
@@ -347,10 +351,23 @@
 	 */
 	function splitCommand(string)
 	{
-		var splitCommand = string.split(/ /g);
+		var _split = string.split(/ /g);
 
 		var command = {
-			app: splitCommand.shift()
+			app: _split.shift()
+		}
+
+		for(var _item in _split)
+		{
+			// If this a param block
+			if(_split[_item][0] == '-')
+			{
+				// Delete the first element
+				_split[_item] = _split[_item].replace('-', '');
+
+				// Split the params
+				command.params = _split[_item].split('');
+			}
 		}
 
 		return command;
@@ -360,7 +377,7 @@
 	/**
 	 *	Scroll to bottom
 	 */
-	function scrollToBottom(o)
+	function scrollToBottom()
 	{
 		var _terminal = o.obj.terminal,
 			scrollHeight = _terminal.scrollHeight;
@@ -372,7 +389,7 @@
 	/**
 	 *	Clear console
 	 */
-	function clearConsole(o)
+	function clearConsole()
 	{
 		o.obj.history.innerHTML = '';
 	}
@@ -381,41 +398,159 @@
 	/**
 	 *	Clear input
 	 */
-	function clearInput(o)
+	function clearInput()
 	{
-		o.obj.input.innerHTML = '';
+		setInput("");
 	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	// TEST
-	window.addEventListener('load', function()
+	/**
+	 *	Tab and search for files
+	 */
+	function tabFiles()
 	{
-		setTimeout(function()
+		var currentPath = class_storage.showAll(),
+			inputValue = getInput(),
+			inputSplit = inputValue.split(/ /g),
+			foundThis = [];
+
+		if(
+			inputSplit.length &&
+			inputSplit[inputSplit.length - 1]
+		)
 		{
-			new program_terminal.init();
+			var seachPattner = inputSplit.pop();
 
-		}, 1000);
-	});
+			for(var _name in currentPath)
+			{
+				var regex = new RegExp("^(" + seachPattner + ')', 'i');
+
+				if(_name.match(regex))
+				{
+					foundThis.push(_name);
+				}
+			}
+
+			// Print all found names
+			if(foundThis.length)
+			{
+				// Have found more than one
+				if(foundThis.length > 1)
+				{
+					var returnValue = false,
+						matchValue = "",
+						lengthMatch = 0;
+
+					// Search for the same beinning content
+					var matchCharLenght = 0;
+
+					for(var i = 0; i < 500; i++)
+					{
+						var _loopChar = false,
+							_loopMatchAll = true;
+
+						for(var _string in foundThis)
+						{
+							if(!_loopChar)
+							{
+								_loopChar = foundThis[_string][i];
+							}
+							else
+							{
+								if(
+									foundThis[_string][i] &&
+									foundThis[_string][i] == _loopChar
+								)
+								{
+
+								}
+								else {
+									_loopMatchAll = false;
+									break;
+								}
+							}
+						}
+
+						if(_loopMatchAll)
+						{
+							matchValue += _loopChar;
+							matchCharLenght++;
+						}
+						else
+						{
+							break;
+						}
+					}
+
+					// All founds value have the same beginning content
+					if(
+						matchCharLenght &&
+						matchCharLenght > seachPattner.length
+					)
+					{
+						var regex = new RegExp(seachPattner + '$', 'i');
+						setInput(inputValue.replace(regex, matchValue));
+					}
+
+					// No match value found
+					else {
+						// Print owner
+						printOwnerToHisotry();
+
+						for(var _item in foundThis)
+						{
+							if(_item == 0)
+							{
+								returnValue = foundThis[_item];
+							}
+							else
+							{
+								returnValue += ' ' + foundThis[_item];
+							}
+						}
+
+						// Print to history
+						printHistory(returnValue);
+					}
+				}
+
+				// Have found only one
+				else {
+					var regex = new RegExp(seachPattner + '$', 'i');
+					setInput(inputValue.replace(regex, foundThis[0] + ''));
+				}
+
+				scrollToBottom();
+			}
+		}
+	}
 
 
+	/**
+	 *	Get terminal input
+	 */
+	function getInput()
+	{
+		return o.obj.input.value;
+	}
 
 
-}).call(this);
+	/**
+	 *	Set terminal input
+	 */
+	function setInput(insert)
+	{
+		o.obj.input.value = insert;
+	}
+
+
+	/**
+	 *	Switch to terminal placeholders
+	 */
+	function switchFromPlaceholder(text)
+	{
+		text = text.replace(/\[BR\]/g, '<br>');
+
+		return text;
+	}
+};

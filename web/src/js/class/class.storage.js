@@ -163,9 +163,11 @@
 	/**
 	 *	Show all files
 	 */
-	class_storage.showAll = function()
+	class_storage.showAll = function(path)
 	{
-		var splitPath = getSplitPath(class_storage.getCurrentRealPath()),
+		var path = (path) ? path : class_storage.getCurrentRealPath();
+
+		var splitPath = getSplitPath(path),
 			dirContent = getDir(splitPath);
 
 		return dirContent;

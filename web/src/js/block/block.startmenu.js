@@ -26,7 +26,8 @@
 			startmenu_btn: document.querySelector('.taskline__start'),
 
 			area: document.querySelector('.startmenu'),
- 			programm_terminal: document.querySelector('.startmenu .js__onclickTerminal')
+ 			programm_terminal: document.querySelector('.startmenu .js__onclickTerminal'),
+ 			programm_explorer: document.querySelector('.startmenu .js__onclickExplorer')
  		}
 
 		boot.printBootMessage('<br>');
@@ -109,7 +110,17 @@
 			closestartmenu();
 
 			// Open terminal
-			new program_terminal.init();
+			new program_terminal;
+		});
+
+		// Click event: explorer program
+		startmenu.obj.programm_explorer.addEventListener('click', function()
+		{
+			// Close start menu
+			closestartmenu();
+
+			// Open terminal
+			new programm_explorer;
 		});
 	}
 

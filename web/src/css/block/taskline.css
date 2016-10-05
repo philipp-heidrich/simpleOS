@@ -5,7 +5,7 @@
 	bottom: 0;
 	width: 100%;
 	height: var(--taskline-height);
-	background-color: #3c3c3c;
+	background-color: rgba(27, 27, 27, .92);
 
 	& .taskline__start {
 		position: absolute;
@@ -62,7 +62,7 @@
 		padding: 0 5px;
 	}
 
-	& .taskline__program {
+	& .taskline__window {
 		height: 100%;
 		float: left;
 		min-width: 50px;
@@ -72,11 +72,11 @@
 		transition: .4s var(--transition-art);
 		position: relative;
 
-		&.taskline__program--selected {
+		&.taskline__window--selected {
 			background-color: rgba(0, 0, 0, .07);
 		}
 
-		&.taskline__program--minimized {
+		&.taskline__window--minimized {
 			border-color: transparent;
 		}
 

@@ -60,6 +60,12 @@
 	& .terminal__input {
 		position: relative;
 		cursor: text;
+		padding: 0;
+		max-width: none;
+		color: var(--console-color);
+		font-family: var(--console-font);
+		font-size: .9rem;
+		background-color: transparent;
 	}
 
 	& .terminal__inputArea {

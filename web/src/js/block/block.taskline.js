@@ -67,7 +67,7 @@
   	{
   		o.taskProgram = document.createElement('li');
   		o.taskProgram.program_id = o.id_counter;
-  		o.taskProgram.className = 'taskline__program';
+  		o.taskProgram.className = 'taskline__window';
 
   		// Value
 		o.taskShow = document.createElement('div');

@@ -46,7 +46,7 @@
 	/**
 	 *	Start program
 	 */
-	program.startWindow = function(id, title)
+	program.startWindow = function(id, title, fullscreen)
 	{
 		var o = {};
 
@@ -102,6 +102,11 @@
 
 		// Set to selected
 		program.setSelection(o.id_counter);
+
+		if(fullscreen)
+		{
+			program.maximizeWindow(program.idCounter);
+		}
 
 		return o;
 	}
@@ -160,8 +165,8 @@
  	 */
  	program.minimizeWindow = function(id)
  	{
- 		var o = program.list[id];
- 		var _layer = o.layer;
+ 		var o = program.list[id],
+ 			_layer = o.layer;
 
  		// Edit object
  		o.isMinimized = true;
@@ -170,8 +175,13 @@
  		program.removeSelection();
 
 		// Edit HTML
-		_layer.className = _layer.className.replace(' program--maximize', '');
- 		_layer.className += ' program--minimized';
+ 		_layer.className += ' window--minimized';
+
+		// Delay
+		setTimeout(function()
+		{
+			_layer.style.display = 'none';
+		}, 500);
  	}
 
 
@@ -190,17 +200,13 @@
  		program.setSelection(id);
 
  		// Edit HTML
- 		_layer.className = _layer.className.replace(' program--minimized', ' program--reminimized');
-
-		if(o.isMaximize)
-		{
-			_layer.className += ' program--maximize';
-		}
+ 		_layer.className = _layer.className.replace(' window--minimized', ' window--reminimized');
+		_layer.style.display = 'block';
 
  		// Delete reminimized class
  		setTimeout(function()
  		{
- 			_layer.className = _layer.className.replace(' program--reminimized', '');
+ 			_layer.className = _layer.className.replace(' window--reminimized', '');
  		}, 550);
  	}
 
@@ -220,8 +226,8 @@
  			o.isSelected = false;
 
  			// Remove selection class
- 			_layer.className = _layer.className.replace(' program--selected', '');
- 			_task.className = _task.className.replace(' taskline__program--selected', '');
+ 			_layer.className = _layer.className.replace(' window--selected', '');
+ 			_task.className = _task.className.replace(' taskline__window--selected', '');
 
  			// Remove selection
  			program.selected = false;
@@ -254,8 +260,8 @@
  			_layer.style.zIndex = program.counter;
 
  			// Set selection class
- 			_layer.className += ' program--selected';
- 			_task.className += ' taskline__program--selected';
+ 			_layer.className += ' window--selected';
+ 			_task.className += ' taskline__window--selected';
 
  			// Set global selection
  			program.selected = selectNr;
@@ -287,12 +293,15 @@
 				y: o.layer.offsetTop
 			}
 
-			o.layer.className += ' program--maximize';
+			o.layer.className += ' window--maximize';
 
 			// Run all extern maximize functions
-			for(var i = 0; i < o.pushMaximizedArray.length; i++)
+			if(o.pushMaximizedArray)
 			{
-				o.pushMaximizedArray[i]();
+				for(var i = 0; i < o.pushMaximizedArray.length; i++)
+				{
+					o.pushMaximizedArray[i]();
+				}
 			}
 		}
 	}
@@ -312,7 +321,7 @@
 			o.isMaximize = false;
 
 			// Delete class
-			o.layer.className = o.layer.className.replace(' program--maximize', '');
+			o.layer.className = o.layer.className.replace(' window--maximize', '');
 
 			// Set new position
 			if(oldWindowsPos)
@@ -329,9 +338,12 @@
 			}
 
 			// Run all extern reduce functions
-			for(var i = 0; i < o.pushReduceArray.length; i++)
+			if(o.pushReduceArray)
 			{
-				o.pushReduceArray[i]();
+				for(var i = 0; i < o.pushReduceArray.length; i++)
+				{
+					o.pushReduceArray[i]();
+				}
 			}
 		}
 	}
@@ -401,15 +413,16 @@
 	 */
 	function createWindow(o)
 	{
+
 		var tmpl = document.querySelector('#programs [program="' + o.id_program + '"]');
 
 		o.layer = document.createElement('div');
 		o.layer.program_id = o.id_counter;
 		o.layer.setAttribute('data-program-id', o.id_counter);
-		o.layer.className = 'program';
+		o.layer.className = 'window';
 
 		o.resizeArea = document.createElement('div');
-		o.resizeArea.className = 'program__resizeArea';
+		o.resizeArea.className = 'window__resizeArea';
 		o.layer.appendChild(o.resizeArea);
 
 		// Resize - top
@@ -424,12 +437,12 @@
 
 		// Header
 		o.header = document.createElement('div');
-		o.header.className = 'program__header';
+		o.header.className = 'window__header';
 		o.layer.appendChild(o.header);
 
 		// Header - move
 		o.headerMove = document.createElement('div');
-		o.headerMove.className = 'program__move';
+		o.headerMove.className = 'window__move';
 		o.headerMove.onmousedown = function(event)
 		{
 			// Disabled global click event
@@ -453,17 +466,17 @@
 
 		// Header - title
 		o.headerTitle = document.createElement('div');
-		o.headerTitle.className = 'program__title';
+		o.headerTitle.className = 'window__title';
 		o.headerTitle.innerHTML = o.title;
 		o.header.appendChild(o.headerTitle);
 
 		o.headerRight = document.createElement('div');
-		o.headerRight.className = 'program__headerRight';
+		o.headerRight.className = 'window__headerRight';
 		o.header.appendChild(o.headerRight);
 
 		// Header - Minimze Btn
 		o.headerMinimize = document.createElement('div');
-		o.headerMinimize.className = 'program__headerBtn program__headerBtn--mini';
+		o.headerMinimize.className = 'window__headerBtn window__headerBtn--mini';
 		o.headerMinimize.onclick = function()
 		{
 			// Disabled global click event
@@ -477,7 +490,7 @@
 
 		// Header - Max-min Btn
 		o.headerMaxMinimize = document.createElement('div');
-		o.headerMaxMinimize.className = 'program__headerBtn program__headerBtn--maxminmize';
+		o.headerMaxMinimize.className = 'window__headerBtn window__headerBtn--maxminmize';
 		o.headerMaxMinimize.onclick = function()
 		{
 			// Disabled global click event
@@ -496,7 +509,7 @@
 
 		// Header - Close Btn
 		o.headerClose = document.createElement('div');
-		o.headerClose.className = 'program__headerBtn program__headerBtn--close';
+		o.headerClose.className = 'window__headerBtn window__headerBtn--close';
 		o.headerClose.onclick = function()
 		{
 			// Disabled global click event
@@ -509,7 +522,7 @@
 
 		// Content
 		o.content = tmpl.cloneNode(true);
-		o.content.className = 'program__content ' + o.id_program;
+		o.content.className = 'window__content ' + o.id_program;
 		o.layer.appendChild(o.content);
 	}
 
@@ -528,7 +541,7 @@
 			}
 			else
 			{
-				var parentProgram = hasParent('.program', event.target, true);
+				var parentProgram = hasParent('.window', event.target, true);
 
 				// Check if this a child from a program
 				if(
@@ -652,7 +665,7 @@
 		var id = 'changeSize_' + type;
 
 		o[id] = document.createElement('div');
-		o[id].className = 'program__changeSize';
+		o[id].className = 'window__changeSize';
 		o[id].setAttribute('data-position', type);
 		o[id].onmousedown = function(event)
 		{
@@ -914,9 +927,12 @@
 			}
 
 			// Run all resize functions
-			for(var i = 0; i < o.pushResizeArray.length; i++)
+			if(o.pushResizeArray)
 			{
-				o.pushResizeArray[i]();
+				for(var i = 0; i < o.pushResizeArray.length; i++)
+				{
+					o.pushResizeArray[i]();
+				}
 			}
 		}
 	}

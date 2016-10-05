@@ -4,6 +4,11 @@
 		AUTHOR: "Philipp Heidrich"
 	}
 
+	// var delay_boot = 0,
+	// 	delay_program = 0;
+	var delay_boot = 500,
+		delay_program = 150;
+
 
 	/**
 	 *	Inital boot
@@ -30,11 +35,11 @@
 			// Check is this the first visit
 			if(class_os.getFirstPcVisit())
 			{
-				setTimeout(register.init, 500);
+				setTimeout(register.init, delay_boot);
 			}
 			else
 			{
-				setTimeout(login.init, 500);
+				setTimeout(login.init, delay_boot);
 			}
 		});
 	}
@@ -77,8 +82,7 @@
 			{
 				cb();
 			}
-		// }, 150);
-		}, 0);
+		}, delay_program);
 	}
 
 

@@ -1,4 +1,4 @@
-.program {
+.window {
 	position: absolute;
 	left: 10%;
 	top: 10%;
@@ -11,25 +11,22 @@
 	background-color: #eee;
 	box-shadow: 0 0 8px rgba(0, 0, 0, .1);
 
-	&.program--selected {
+	&.window--selected {
 		border-color: var(--color-main);
 		box-shadow: 0 0 10px rgba(0, 0, 0, .25);
 	}
 
-	&.program--minimized {
-		left: -200px !important;
-		top: 100% !important;
+	&.window--minimized {
 		opacity: 0;
-		transform: scale(.2);
-		transition: .5s;
+		animation: window_minimize .4s;
 	}
 
-	&.program--reminimized {
+	&.window--reminimized {
 		opacity: 1;
-		transition: .3s;
+		animation: window_reminimized .4s;
 	}
 
-	&.program--maximize {
+	&.window--maximize {
 		left: 0 !important;
 		top: 0 !important;
 		bottom: var(--taskline-height) !important;
@@ -40,7 +37,7 @@
 		border: 0;
 	}
 
-	& .program__changeSize {
+	& .window__changeSize {
 		position: absolute;
 		z-index: 8;
 
@@ -113,16 +110,17 @@
 		}
 	}
 
-	& .program__header {
+	& .window__header {
 		position: relative;
 		left: 0;
 		top: 0;
 		width: 100%;
 		height: 32px;
 		background-color: #fff;
+		border-bottom: 1px solid #eaeaea;
 	}
 
-	& .program__move {
+	& .window__move {
 		position: absolute;
 		z-index: 2;
 		left: 0;
@@ -131,7 +129,7 @@
 		width: 100%;
 	}
 
-	& .program__title {
+	& .window__title {
 		position: absolute;
 		z-index: 1;
 		width: 100%;
@@ -140,20 +138,20 @@
 		padding: 0 100px 0 10px;
 	}
 
-	& .program__headerRight {
+	& .window__headerRight {
 		position: absolute;
 		z-index: 3;
 		right: 0;
 		top: 0;
 		height: 100%;
-		width: 100px;
+		width: 99px;
 		text-align: right;
 	}
 
-	& .program__headerBtn {
+	& .window__headerBtn {
 		display: block;
 		float: left;
-		width: 33.333%;
+		width: 33px;
 		height: 100%;
 		color: #ccc;
 		transition: .4s var(--transition-art);
@@ -162,21 +160,33 @@
 			background-color: #eee;
 		}
 
-		&.program__headerBtn--close {
+		&.window__headerBtn--close {
 			&:hover {
 				color: #fff;
 				background-color: var(--color-red);
 			}
 		}
 
-		&.program__headerBtn--maxminmize {
+		&.window__headerBtn--mini {
 			& .material-icons {
-				font-size: 19px;
+				font-size: 20px;
+			}
+		}
+
+		&.window__headerBtn--maxminmize {
+			& .material-icons {
+				font-size: 16px;
+			}
+		}
+
+		&.window__headerBtn--close {
+			& .material-icons {
+				font-size: 20px;
 			}
 		}
 	}
 
-	& .program__content {
+	& .window__content {
 		position: absolute;
 		left: 0;
 		top: 32px;
