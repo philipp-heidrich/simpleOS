@@ -98,14 +98,7 @@ module.exports = function(grunt)
 
 		copy: {
             debug: {
-                files: [
-                {
-                    src: grunt.file.readJSON('gruntcopy.json').font,
-					dest: path.build.debug + '/fonts/MaterialIcons',
-					cwd: path.modules + '/material-design-icons/iconfont',
-                    expand: true
-                },
-                {
+                files: [{
                     src: '**/*',
 					dest: path.build.debug,
                     cwd: path.res,
@@ -127,7 +120,8 @@ module.exports = function(grunt)
                     '!widget/**/*.html',
                     '!layout/**/*.html',
                     '!program/**/*.html',
-					'!module/**/*.html'
+					'!module/**/*.html',
+					'!block/**/*.html'
                 ],
                 dest: path.build.debug + '/',
                 cwd: path.html
