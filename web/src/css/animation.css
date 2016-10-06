@@ -45,22 +45,3 @@
 					scale(.7);
 	}
 }
-
-
-/**
- *	Reminimized function
- */
- @keyframes window_reminimized {
- 	0% {
- 		opacity: 0;
-		transform: 	rotate(2deg)
- 					translate(0, 100px)
- 					scale(.7);
- 	}
- 	100% {
- 		opacity: 1;
-		transform: 	rotate(0)
- 					translate(0, 0)
- 					scale(1);
- 	}
- }
