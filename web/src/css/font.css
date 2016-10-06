@@ -230,16 +230,12 @@
  *  Google Material Design
  **/
 @font-face {
-    font-family: 'Material Icons';
-    font-style: normal;
-    font-weight: 400;
-    src: url(https://example.com/MaterialIcons-Regular.eot);
-    src:
-        local('Material Icons'),
-        local('MaterialIcons-Regular'),
-        url(../fonts/MaterialIcons/MaterialIcons-Regular.woff2) format('woff2'),
-        url(../fonts/MaterialIcons/MaterialIcons-Regular.woff) format('woff'),
-        url(../fonts/MaterialIcons/MaterialIcons-Regular.ttf) format('truetype');
+	font-family: 'Material Icons';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Material Icons'),
+		local('MaterialIcons-Regular'),
+		url(https://fonts.gstatic.com/s/materialicons/v18/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2) format('woff2');
 }
 
 
@@ -257,7 +253,6 @@
     white-space: nowrap;
     direction: ltr;
 
-    // color: #000;
     text-shadow:none;
     width:100%;
     height:100%;

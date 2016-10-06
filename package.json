@@ -17,8 +17,6 @@
     "grunt-postcss": "^0.8.0",
     "grunt-text-replace": "*",
     "load-grunt-tasks": "*",
-    "material-design-icons": "*",
-
 	"postcss-import": "*",
     "postcss-cssnext": "2.7.0",
 	"pixrem": "3.0.2",
