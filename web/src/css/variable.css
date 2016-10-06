@@ -6,6 +6,7 @@
 	--console-color: #fff;
 	--console-background: #313131;
 	--console-font: 'Hack', monsopace;
+	--console-font-size: 12px;
 
 	--transition-art: cubic-bezier(.215,.665,.11,.9);
 
