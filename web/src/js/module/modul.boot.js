@@ -4,10 +4,10 @@
 		AUTHOR: "Philipp Heidrich"
 	}
 
-	// var delay_boot = 0,
-	// 	delay_program = 0;
-	var delay_boot = 500,
-		delay_program = 150;
+	var delay_boot = 0,
+		delay_program = 0;
+	// var delay_boot = 500,
+	// 	delay_program = 150;
 
 
 	/**

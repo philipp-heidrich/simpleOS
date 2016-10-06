@@ -7,9 +7,11 @@
 	width: 550px;
 	height: 400px;
 	z-index: 99;
+	opacity: 1;
 	border: 1px solid #e8e8e8;
 	background-color: #eee;
 	box-shadow: 0 0 8px rgba(0, 0, 0, .1);
+	animation: window_start .4s;
 
 	&.window--selected {
 		border-color: var(--color-main);
@@ -24,6 +26,11 @@
 	&.window--reminimized {
 		opacity: 1;
 		animation: window_reminimized .4s;
+	}
+
+	&.window--close {
+		opacity: 0;
+		animation: window_end .4s;
 	}
 
 	&.window--maximize {

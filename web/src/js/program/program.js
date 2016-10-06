@@ -151,11 +151,17 @@
  			program.selected = false;
  		}
 
- 		// Remove html object
- 		_layer.parentNode.removeChild(_layer);
- 		_task.parentNode.removeChild(_task);
+		// Add close class
+		_layer.className += ' window--close';
+		_task.parentNode.removeChild(_task);
 
- 		// Remove object
+		setTimeout(function()
+		{
+			// Remove html object
+	 		_layer.parentNode.removeChild(_layer);
+		}, 500);
+
+		// Remove object
  		delete program.list[id];
  	}
 
