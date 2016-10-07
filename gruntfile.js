@@ -35,26 +35,64 @@ module.exports = function(grunt)
 			}
         },
 
-		postcss: {
+		uglify: {
 			options: {
-				map: true,
-				processors: [
-					require("postcss-import")(),
-					require("postcss-cssnext")({
-						warnForDuplicates: false
-					}),
-					require('pixrem')(),
-					require('autoprefixer')({
-						browsers: 'last 2 versions'
-					}),
-					require("cssnano")()
-				]
+				sourceMap: false,
+				compress: {
+					drop_console: false
+				}
 			},
+			release: {
+				files: [{
+                    src: [
+                        path.js + '/**/*.js'
+    				],
+    				dest: path.build.release + '/js/app.js'
+                }]
+			}
+		},
+
+		postcss: {
 			debug: {
-				expand: false,
+				options: {
+					map: {
+						inline: false
+					},
+					processors: [
+						require("postcss-import")(),
+						require("postcss-cssnext")({
+							warnForDuplicates: false
+						}),
+						require('cssnano')(),
+						require('pixrem')(),
+						require('autoprefixer')({
+							browsers: 'last 2 versions'
+						})
+					]
+				},
 				files: [{
 					src: path.css + '/app.css',
 					dest: path.build.debug + '/css/app.css'
+				}]
+			},
+			release: {
+				options: {
+					map: false,
+					processors: [
+						require("postcss-import")(),
+						require("postcss-cssnext")({
+							warnForDuplicates: false
+						}),
+						require('cssnano')(),
+						require('pixrem')(),
+						require('autoprefixer')({
+							browsers: 'last 2 versions'
+						})
+					]
+				},
+				files: [{
+					src: path.css + '/app.css',
+					dest: path.build.release + '/css/app.css'
 				}]
 			}
 		},
@@ -65,6 +103,40 @@ module.exports = function(grunt)
     				path.build.debug + '/**/*.html',
     				path.build.debug + '/**/*.json',
     				path.build.debug + '/**/*.js'
+    			],
+                overwrite: true,
+				replacements: [
+                    {
+    					from: 	'{{ version }}',
+    					to: 	'<%= pkg.version %>'
+    				},
+                    {
+    					from: 	'{{ name }}',
+    					to: 	'<%= pkg.name %>'
+    				},
+                    {
+    					from: 	'{{ author }}',
+    					to: 	'<%= pkg.author %>'
+    				},
+                    {
+    					from: 	'{{ author_mail }}',
+    					to: 	'<%= pkg.author_mail %>'
+    				},
+                    {
+    					from: 	'{{ description }}',
+    					to: 	'<%= pkg.description %>'
+    				},
+                    {
+                        from:   '{{ timestamp }}',
+                        to:     new Date().getTime()
+                    }
+                ]
+            },
+            release: {
+                src: [
+    				path.build.release + '/**/*.html',
+    				path.build.release + '/**/*.json',
+    				path.build.release + '/**/*.js'
     			],
                 overwrite: true,
 				replacements: [
@@ -104,6 +176,14 @@ module.exports = function(grunt)
                     cwd: path.res,
                     expand: true
                 }]
+            },
+            release: {
+                files: [{
+                    src: '**/*',
+					dest: path.build.release,
+                    cwd: path.res,
+                    expand: true
+                }]
             }
 		},
 
@@ -125,7 +205,20 @@ module.exports = function(grunt)
                 ],
                 dest: path.build.debug + '/',
                 cwd: path.html
-            }
+            },
+			release: {
+				expand: true,
+                src: [
+                    '**/*.html',
+                    '!widget/**/*.html',
+                    '!layout/**/*.html',
+                    '!program/**/*.html',
+					'!module/**/*.html',
+					'!block/**/*.html'
+                ],
+                dest: path.build.release + '/',
+                cwd: path.html
+			}
         },
 
 		watch: {
@@ -184,12 +277,23 @@ module.exports = function(grunt)
 
 	require('load-grunt-tasks')(grunt);
 
+	// Debug
 	grunt.registerTask('default', [
-		'includereplace',
-		'postcss',
-		'concat',
-        'copy',
-        'replace',
+		'includereplace:debug',
+		'postcss:debug',
+		'concat:debug',
+        'copy:debug',
+        'replace:debug',
         'watch'
+	]);
+
+	// Release
+	grunt.registerTask('release', [
+		'includereplace:release',
+		'postcss:release',
+		'uglify:release',
+		'copy:release',
+		'replace:release',
+		'uglify:release'
 	]);
 };

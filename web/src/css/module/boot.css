@@ -6,6 +6,7 @@
 	background-color: var(--console-background);
 	color: var(--console-color);
 	font-family: var(--console-font);
+	font-size: var(--console-font-size);
 
 	& .boot__scroller {
 		z-index: 2;

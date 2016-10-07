@@ -2,7 +2,7 @@
 	background-color: var(--console-background);
 	color: var(--console-color);
 	font-family: var(--console-font);
-	font-size: .9rem;
+	font-size: var(--console-font-size);
 	padding: 3px 7px;
 	user-select: text;
 	cursor: text;
@@ -64,7 +64,7 @@
 		max-width: none;
 		color: var(--console-color);
 		font-family: var(--console-font);
-		font-size: .9rem;
+		font-size: var(--console-font-size);
 		background-color: transparent;
 	}
 

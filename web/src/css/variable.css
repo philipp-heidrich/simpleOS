@@ -1,12 +1,12 @@
 :root {
-	--site-font: Roboto, sans-serif;
+	--site-font: 'Open Sans', sans-serif;
 
 	--taskline-height: 44px;
 
 	--console-color: #fff;
 	--console-background: #313131;
 	--console-font: 'Hack', monsopace;
-	--console-font-size: 12px;
+	--console-font-size: 16px;
 
 	--transition-art: cubic-bezier(.215,.665,.11,.9);
 
