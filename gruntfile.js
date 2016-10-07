@@ -189,12 +189,11 @@ module.exports = function(grunt)
 
 		includereplace: {
 			options: {
-				prefix: '{% ',
-				suffix: ' %}',
+				prefix: '<',
+				suffix: '>',
 				includesDir: path.html
 			},
             debug: {
-                expand: true,
                 src: [
                     '**/*.html',
                     '!widget/**/*.html',
@@ -207,7 +206,6 @@ module.exports = function(grunt)
                 cwd: path.html
             },
 			release: {
-				expand: true,
                 src: [
                     '**/*.html',
                     '!widget/**/*.html',
