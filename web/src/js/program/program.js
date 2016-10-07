@@ -159,7 +159,7 @@
 		{
 			// Remove html object
 	 		_layer.parentNode.removeChild(_layer);
-		}, 500);
+		}, 400);
 
 		// Remove object
  		delete program.list[id];
@@ -174,20 +174,29 @@
  		var o = program.list[id],
  			_layer = o.layer;
 
- 		// Edit object
- 		o.isMinimized = true;
-
- 		// Remove selection
- 		program.removeSelection();
-
-		// Edit HTML
- 		_layer.className += ' window--minimized';
-
-		// Delay
-		setTimeout(function()
+		if(!o.isAnimiation)
 		{
-			_layer.style.display = 'none';
-		}, 500);
+			// Set animation var
+			o.isAnimiation = true;
+
+	 		// Edit object
+	 		o.isMinimized = true;
+
+	 		// Remove selection
+	 		program.removeSelection();
+
+			// Edit HTML
+	 		_layer.className += ' window--minimized';
+
+			// Delay
+			setTimeout(function()
+			{
+				_layer.style.display = 'none';
+
+				// Disable animation
+				o.isAnimiation = false;
+			}, 400);
+		}
  	}
 
 
@@ -196,24 +205,33 @@
  	 */
  	program.reminizedWindow = function(id)
  	{
- 		var o = program.list[id];
- 		var _layer = o.layer;
+ 		var o = program.list[id],
+ 			_layer = o.layer;
 
- 		// Edit object
- 		o.isMinimized = false;
+		if(!o.isAnimiation)
+		{
+			// Set animation var
+			o.isAnimiation = true;
 
- 		// Remove selection
- 		program.setSelection(id);
+	 		// Edit object
+	 		o.isMinimized = false;
 
- 		// Edit HTML
- 		_layer.className = _layer.className.replace(' window--minimized', ' window--reminimized');
-		_layer.style.display = 'block';
+	 		// Remove selection
+	 		program.setSelection(id);
 
- 		// Delete reminimized class
- 		setTimeout(function()
- 		{
- 			_layer.className = _layer.className.replace(' window--reminimized', '');
- 		}, 550);
+	 		// Edit HTML
+	 		_layer.className = _layer.className.replace(' window--minimized', ' window--reminimized');
+			_layer.style.display = 'block';
+
+	 		// Delete reminimized class
+	 		setTimeout(function()
+	 		{
+	 			_layer.className = _layer.className.replace(' window--reminimized', '');
+
+				// Disabled animation var
+				o.isAnimiation = false;
+	 		}, 400);
+		}
  	}
 
 

@@ -84,7 +84,8 @@
 			background-color: rgba(0, 0, 0, .1);
 
 			& .taskline__programMenu {
-				transition: .4s var(--transition-art) 1s;
+				margin-top: -40px;
+				transition: opacity .3s var(--transition-art) 1s;
 				opacity: 1;
 			}
 		}
@@ -101,13 +102,12 @@
 	& .taskline__programMenu {
 		position: absolute;
 		left: 50%;
-		bottom: 100%;
+		top: 0;
 		width: 38px;
 		padding: 7px;
 		opacity: 0;
-		margin: 0 0 5px -17px;
+		margin: -5px 0 0 -17px;
 		background-color: #dedede;
-		transition: .4s var(--transition-art);
 
 		&:after {
 			content: '';
