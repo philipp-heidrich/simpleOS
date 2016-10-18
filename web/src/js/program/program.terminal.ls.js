@@ -7,10 +7,10 @@ var program_terminal_ls = function(o, params)
 	{
 		if(!printDir)
 		{
-			printDir = _item;
+			printDir = fsDir[_item].name;
 		}
 		else {
-			printDir += '[BR]' + _item;
+			printDir += '[BR]' + fsDir[_item].name;
 		}
 	}
 

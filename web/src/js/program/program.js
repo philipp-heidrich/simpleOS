@@ -1,7 +1,8 @@
 (function()
 {
 	this.program = {
-		AUTHOR: 'Philipp Heidrich'
+		AUTHOR: 'Philipp Heidrich',
+		VERSION: 1
 	}
 
 	program.list 		= {};

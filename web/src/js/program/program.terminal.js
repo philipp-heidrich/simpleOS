@@ -3,7 +3,7 @@ var program_terminal = function(fullscreen)
 	// Create global object
 	var o = {
 		AUTHOR: 'Philipp Heidrich',
-		VERSION: 2,
+		VERSION: 3,
 		pressedKeys: []
 	};
 
@@ -425,9 +425,9 @@ var program_terminal = function(fullscreen)
 			{
 				var regex = new RegExp("^(" + seachPattner + ')', 'i');
 
-				if(_name.match(regex))
+				if(currentPath[_name].name.match(regex))
 				{
-					foundThis.push(_name);
+					foundThis.push(currentPath[_name].name);
 				}
 			}
 
@@ -471,7 +471,10 @@ var program_terminal = function(fullscreen)
 							}
 						}
 
-						if(_loopMatchAll)
+						if(
+							_loopMatchAll &&
+							_loopChar
+						)
 						{
 							matchValue += _loopChar;
 							matchCharLenght++;

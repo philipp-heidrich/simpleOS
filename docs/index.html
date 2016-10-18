@@ -9,11 +9,11 @@
 <link href="https://fonts.gstatic.com" rel="dns-prefetch">
 <link href="https://fonts.gstatic.com" rel="preconnect">
 
-<link href="css/app.css?1475839389481" rel="stylesheet">
+<link href="css/app.css?1476783968931" rel="stylesheet">
 <link href='https://cdn.jsdelivr.net/font-hack/2.020/css/hack.min.css' rel='stylesheet'>
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
 
-<script type="text/javascript" src="js/app.js?1475839389481"></script>
+<script type="text/javascript" src="js/app.js?1476783968931"></script>
 
 	</head>
 	<body>
@@ -36,7 +36,7 @@
 		<li>
 			A simple operating system build in native javascript<br>
 			<br>
-			Version: 0.0.4<br>
+			Version: 0.0.5<br>
 			Author: Philipp Heidrich &lt;phi.heidrich@gmail.com&gt;
 		</li>
 
@@ -241,7 +241,23 @@
 
 			<!-- HTML: Explorer -->
 			<div program="explorer">
+	<div class="explorer__header">
+		<!-- Current explorer path -->
+		<ul class="explorer__path"></ul>
+	</div>
+
+	<!-- Show block -->
 	<div class="explorer__show"></div>
+
+	<!-- Hidden block -->
+	<div class="explorer__templ">
+
+		<!-- Data template -->
+		<div class="explorer__data">
+			<div class="explorer__icon"></div>
+			<div class="explorer__dataName"></div>
+		</div>
+	</div>
 </div>
 
 		</div>

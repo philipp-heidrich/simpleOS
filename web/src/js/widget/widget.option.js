@@ -28,19 +28,15 @@
 
 			// Filesystem
 			case option.globalParam + '_storage_filesys':
-				defaultItem = {
-					"home": {
-						"type": "dir",
-						"dir": {
-							"admin": {
-								"type": "dir"
-							}
-						}
-					},
-					"var": {
-						"type": "dir"
-					}
-				};
+				defaultItem = [{
+					"name": "home",
+					"type": "dir",
+					"childs": []
+				}, {
+					"name": "dir",
+					"type": "dir",
+					"childs": []
+				}]
 		}
 
 		// Gebe default Wert zurück

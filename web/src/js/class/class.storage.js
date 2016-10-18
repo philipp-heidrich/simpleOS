@@ -68,46 +68,63 @@
 	 */
 	class_storage.createDir = function(path)
 	{
-		var path = getSplitPath(path),
+		var path = class_storage.getSplitPath(path),
 			createDir = path.pop(),
 			foundPath = class_storage.fs,
 			isFound = false;
 
-		for(var _dir in path)
+		for(var _item in path)
 		{
-			var _item = path[_dir];
+			var _dir = path[_item];
 
-			if(
-				foundPath[_item] &&
-				foundPath[_item].type == 'dir'
-			)
+			for(var _searchItem in foundPath)
 			{
-				isFound = true;
-				foundPath = foundPath[_item];
-			}
-			else
-			{
-				isFound = false;
-				break;
+				if(
+					foundPath[_searchItem].type == 'dir' &&
+					foundPath[_searchItem].name == _dir
+				)
+				{
+					isFound = true;
+					foundPath = foundPath[_searchItem].childs;
+
+					break;
+				}
+				else
+				{
+					isFound = false;
+				}
 			}
 		}
 
 		// Check if this a valid path to the dir
-		if(
-			isFound &&
-			!foundPath[createDir]
-		)
+		if(isFound)
 		{
-			// Create new dir
-			foundPath[createDir] = {
-				'type': 'dir',
-				'dir': {}
-			};
+			var foundItem = false;
 
-			// Save filesystem
-			saveFileSystem();
+			// Check if exists a dir
+			for(var _item in foundPath)
+			{
+				if(foundPath[_item].name == createDir)
+				{
+					foundItem = true;
+					break;
+				}
+			}
 
-			return true;
+			if(!foundItem)
+			{
+				// Create new dir
+				foundPath.push({
+					'name': createDir,
+					'type': 'dir',
+					'childs': []
+				});
+
+				// Save filesystem
+				saveFileSystem();
+
+				return true;
+			}
 		}
 
 		return false;
@@ -119,19 +136,38 @@
 	 */
 	class_storage.createFile = function(path, file, content)
 	{
-		var splitPath = getSplitPath(path),
+		var splitPath = class_storage.getSplitPath(path),
 			dirObj = getDir(splitPath);
 
 		if(dirObj)
 		{
-			dirObj[file] = {
-				'type': 'file',
-				'content': content
+			var foundItem = false;
+
+			// Check if exists a dir
+			for(var _item in dirObj)
+			{
+				if(
+					dirObj[_item].name == file &&
+					dirObj[_item].type == 'file'
+				)
+				{
+					foundItem = true;
+					break;
+				}
 			}
 
-			saveFileSystem();
+			if(!foundItem)
+			{
+				dirObj.push({
+					'name': file,
+					'type': 'file',
+					'content': content
+				});
 
-			return true;
+				saveFileSystem();
+
+				return true;
+			}
 		}
 
 		return false;
@@ -143,7 +179,7 @@
 	 */
 	class_storage.appendContent = function(path, content)
 	{
-		var splitPath = getSplitPath(path),
+		var splitPath = class_storage.getSplitPath(path),
 			dirObj = getFile(splitPath);
 
 		if(dirObj)
@@ -167,28 +203,17 @@
 	{
 		var path = (path) ? path : class_storage.getCurrentRealPath();
 
-		var splitPath = getSplitPath(path),
+		var splitPath = class_storage.getSplitPath(path),
 			dirContent = getDir(splitPath);
 
 		return dirContent;
 	}
 
 
-
-
-
-
-
-	/**
-	 *
-	 *	Private functions
-	 *
-	 */
-
 	/**
 	 *	Split path
 	 */
-	function getSplitPath(path)
+	class_storage.getSplitPath = function(path)
 	{
 		// Check if the first character ~
 		if(path[0] == '~')
@@ -213,6 +238,17 @@
 	}
 
 
+
+
+
+
+
+	/**
+	 *
+	 *	Private functions
+	 *
+	 */
+
 	/**
 	 *	Get the dir
 	 */
@@ -233,21 +269,24 @@
 			{
 				var _dir = dirArray[_item];
 
-				if(
-					foundPath[_dir] &&
-					foundPath[_dir].type == 'dir'
-				)
+				for(var _searchItem in foundPath)
 				{
-					isFound = true;
-					foundPath = foundPath[_dir];
-				}
-				else
-				{
-					isFound = false;
+					if(
+						foundPath[_searchItem] &&
+						foundPath[_searchItem].type == 'dir' &&
+						foundPath[_searchItem].name == _dir &&
+						foundPath[_searchItem].childs
+					)
+					{
+						isFound = true;
+						foundPath = foundPath[_searchItem].childs;
+					}
+					else
+					{
+						isFound = false;
+					}
 				}
 			}
-
-			foundPath = foundPath.dir;
 		}
 
 		// Check have this element a dir

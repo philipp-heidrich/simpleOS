@@ -1,5 +1,5 @@
 .terminal {
-	background-color: var(--console-background);
+	background-color: rgba(16, 16, 16, .95);
 	color: var(--console-color);
 	font-family: var(--console-font);
 	font-size: var(--console-font-size);
