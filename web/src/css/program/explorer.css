@@ -57,6 +57,14 @@
 			border-color: #e0e0e0;
 		}
 
+		&:first-child {
+			padding: 0 14px;
+
+			& .explorer__pathicon {
+				
+			}
+		}
+
 		&:last-child {
 			padding: 0 9px;
 

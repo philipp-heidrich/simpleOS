@@ -130,6 +130,26 @@ var programm_explorer = function(fullscreen)
 		// Remove input values
 		o.obj.explorer_input.value = '';
 		o.obj.explorer_path.innerHTML = '';
+
+		// Create home dir
+		var li = document.createElement('li');
+		li.className = 'explorer__pathitem';
+		li.path = '/';
+		li.onclick = function()
+		{
+			// Save new path
+			o.currentPath = this.path;
+
+			// Show new content
+			showContent();
+			showPath();
+		}
+		o.obj.explorer_path.appendChild(li);
+
+		var icon = document.createElement('i');
+		icon.innerHTML = 'home';
+		icon.className = 'explorer__pathicon material-icons';
+		li.appendChild(icon);
 	}
 
 

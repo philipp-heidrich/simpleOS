@@ -30,10 +30,12 @@
 			case option.globalParam + '_storage_filesys':
 				defaultItem = [{
 					"name": "home",
+					"id": "home",
 					"type": "dir",
 					"childs": []
 				}, {
 					"name": "dir",
+					"id": "dir",
 					"type": "dir",
 					"childs": []
 				}]

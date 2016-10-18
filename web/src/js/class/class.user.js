@@ -49,10 +49,14 @@
 		// Save new account array
 		option.save('account_users', allAccounts);
 
-		// Save new files + dirs content
+		// Create new dirs
 		class_storage.createDir('/home/' + id);
 		class_storage.createDir('/home/' + id + '/Desktop');
-		class_storage.createDir('/home/' + id + '/Eigene Bilder');
+		class_storage.createDir('/home/' + id + '/Own images');
+		class_storage.createDir('/home/' + id + '/Own documents');
+		class_storage.createDir('/home/' + id + '/Own downloads');
+
+		// Create new files
 		class_storage.createFile('/home/' + id, '.bash_history', '');
 		class_storage.createFile('/home/' + id, 'test', '');
 

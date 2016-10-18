@@ -55,20 +55,22 @@
 	 */
 	class_storage.createDir = function(path)
 	{
-		var path = class_storage.getSplitPath(path),
-			createDir = path.pop(),
-			foundPath = class_storage.fs,
-			isFound = false;
+		var path 		= class_storage.getSplitPath(path),
+			name 		= path.pop(),
+			id 			= convertNameToId(name),
+			foundPath 	= class_storage.fs,
+			isFound 	= false;
 
 		for(var _item in path)
 		{
-			var _dir = path[_item];
+			var _dir = path[_item],
+				_id = convertNameToId(_dir);
 
 			for(var _searchItem in foundPath)
 			{
 				if(
 					foundPath[_searchItem].type == 'dir' &&
-					foundPath[_searchItem].name == _dir
+					foundPath[_searchItem].id == _id
 				)
 				{
 					isFound = true;
@@ -91,7 +93,7 @@
 			// Check if exists a dir
 			for(var _item in foundPath)
 			{
-				if(foundPath[_item].name == createDir)
+				if(foundPath[_item].id == id)
 				{
 					foundItem = true;
 					break;
@@ -102,7 +104,8 @@
 			{
 				// Create new dir
 				foundPath.push({
-					'name': createDir,
+					'name': name,
+					'id': id,
 					'type': 'dir',
 					'childs': []
 				});
@@ -123,8 +126,9 @@
 	 */
 	class_storage.createFile = function(path, file, content)
 	{
-		var splitPath = class_storage.getSplitPath(path),
-			dirObj = getDir(splitPath);
+		var splitPath 	= class_storage.getSplitPath(path),
+			dirObj 		= getDir(splitPath),
+			id 			= convertNameToId(file);
 
 		if(dirObj)
 		{
@@ -134,7 +138,7 @@
 			for(var _item in dirObj)
 			{
 				if(
-					dirObj[_item].name == file &&
+					dirObj[_item].id == id &&
 					dirObj[_item].type == 'file'
 				)
 				{
@@ -146,6 +150,7 @@
 			if(!foundItem)
 			{
 				dirObj.push({
+					'id': id,
 					'name': file,
 					'type': 'file',
 					'content': content
@@ -255,14 +260,15 @@
 		else {
 			for(var _item in dirArray)
 			{
-				var _dir = dirArray[_item];
+				var _dir = dirArray[_item],
+					_id = convertNameToId(_dir);
 
 				for(var _searchItem in foundPath)
 				{
 					if(
 						foundPath[_searchItem] &&
 						foundPath[_searchItem].type == 'dir' &&
-						foundPath[_searchItem].name == _dir &&
+						foundPath[_searchItem].id == _id &&
 						foundPath[_searchItem].childs
 					)
 					{
@@ -305,6 +311,8 @@
 		{
 			var _dir = path[_item];
 
+			alert('TODO');
+
 			if(
 				foundPath[_dir] &&
 				foundPath[_dir].type == 'dir'
@@ -321,11 +329,11 @@
 		// Check if the dir found
 		if(
 			isDirFound &&
-			foundPath.dir &&
-			foundPath.dir[file]
+			foundPath.childs &&
+			foundPath.childs[file]
 		)
 		{
-			return foundPath.dir[file];
+			return foundPath.childs[file];
 		}
 
 		return false;
@@ -347,6 +355,17 @@
 	function saveFileSystem()
 	{
 		option.save('storage_filesys', class_storage.fs);
+	}
+
+
+	/**
+	 *	Convert name to id
+	 */
+	function convertNameToId(name)
+	{
+		name = name.replace(/ /g, '_');
+
+		return name;
 	}
 
 

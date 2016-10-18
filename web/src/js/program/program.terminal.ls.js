@@ -1,7 +1,7 @@
 var program_terminal_ls = function(o, params)
 {
 	var printDir = false,
-		fsDir = class_storage.showAll();
+		fsDir = class_storage.showAll(o.currentPath);
 
 	for(var _item in fsDir)
 	{

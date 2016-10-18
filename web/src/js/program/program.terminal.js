@@ -22,6 +22,9 @@ var program_terminal = function(fullscreen)
 		placeholder: o.progObj.content.querySelector('.terminal__placeholder')
 	}
 
+	// Current path
+	o.currentPath = '~';
+
 	// Add events
 	addEvent();
 
@@ -311,7 +314,7 @@ var program_terminal = function(fullscreen)
 
 		var path = document.createElement('div');
 		path.className = 'terminal__path';
-		path.innerHTML = class_storage.getCurrentPath();
+		path.innerHTML = o.currentPath;
 		block.appendChild(path);
 
 		return block;
@@ -409,7 +412,7 @@ var program_terminal = function(fullscreen)
 	 */
 	function tabFiles()
 	{
-		var currentPath = class_storage.showAll(),
+		var currentPath = class_storage.showAll(o.currentPath),
 			inputValue = getInput(),
 			inputSplit = inputValue.split(/ /g),
 			foundThis = [];
@@ -423,8 +426,10 @@ var program_terminal = function(fullscreen)
 
 			for(var _name in currentPath)
 			{
-				var regex = new RegExp("^(" + seachPattner + ')', 'i');
+				// Replace dot with \.
+				var findThis = seachPattner.replace('.', '\\.');
 
+				var regex = new RegExp("^(" + findThis + ')', 'i');
 				if(currentPath[_name].name.match(regex))
 				{
 					foundThis.push(currentPath[_name].name);
