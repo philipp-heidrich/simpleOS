@@ -52,6 +52,7 @@
 		// Save new files + dirs content
 		class_storage.createDir('/home/' + id);
 		class_storage.createDir('/home/' + id + '/Desktop');
+		class_storage.createDir('/home/' + id + '/Eigene Bilder');
 		class_storage.createFile('/home/' + id, '.bash_history', '');
 		class_storage.createFile('/home/' + id, 'test', '');
 

@@ -5,10 +5,6 @@
 	}
 
 
-	var currentPath = '~';
-
-
-
 
 	/**
 	 *
@@ -41,18 +37,9 @@
 	 */
 
 	/**
-	 *	Show current path
-	 */
-	class_storage.getCurrentPath = function()
-	{
-		return currentPath;
-	}
-
-
-	/**
 	 *	Show current real path
 	 */
-	class_storage.getCurrentRealPath = function()
+	class_storage.getCurrentRealPath = function(currentPath)
  	{
  		var path = currentPath;
 
@@ -201,8 +188,6 @@
 	 */
 	class_storage.showAll = function(path)
 	{
-		var path = (path) ? path : class_storage.getCurrentRealPath();
-
 		var splitPath = class_storage.getSplitPath(path),
 			dirContent = getDir(splitPath);
 
@@ -236,6 +221,9 @@
 
 		return splitPath;
 	}
+
+
+
 
 
 
@@ -280,6 +268,8 @@
 					{
 						isFound = true;
 						foundPath = foundPath[_searchItem].childs;
+
+						break;
 					}
 					else
 					{

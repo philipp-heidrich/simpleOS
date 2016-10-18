@@ -14,9 +14,12 @@ var programm_explorer = function(fullscreen)
 		explorer_content: o.progObj.content,
 		explorer_show: o.progObj.content.querySelector('.explorer__show'),
 		explorer_templ: o.progObj.content.querySelector('.explorer__data'),
-		explorer_path: o.progObj.content.querySelector('.explorer__path')
+		explorer_path: o.progObj.content.querySelector('.explorer__pathlist'),
+		explorer_input: o.progObj.content.querySelector('.explorer__pathinput')
 	}
 
+	// Current path
+	o.currentPath = '~';
 
 	// Show current content
 	showContent();
@@ -24,6 +27,7 @@ var programm_explorer = function(fullscreen)
 
 	// Add global click events
 	setWindowEvents();
+
 
 
 
@@ -53,7 +57,7 @@ var programm_explorer = function(fullscreen)
 		clearContent();
 
 		// Get datas
-		var allDatas = class_storage.showAll();
+		var allDatas = class_storage.showAll(o.currentPath);
 
 		// Sort datas
 		allDatas = sortDatas(allDatas, 'ASC');
@@ -67,6 +71,24 @@ var programm_explorer = function(fullscreen)
 
 				// Clone node
 				var _node = o.obj.explorer_templ.cloneNode(true);
+				_node.explorer = _content;
+				_node.onclick = function()
+				{
+					selectThisData(this);
+				}
+
+				_node.ondblclick = function()
+				{
+					if(this.explorer.type == 'dir')
+					{
+						// Save new path
+						o.currentPath = o.currentPath + '/' + this.explorer.name;
+
+						// Show new content
+						showContent();
+						showPath();
+					}
+				};
 				o.obj.explorer_show.appendChild(_node);
 
 				// Get html objects
@@ -95,14 +117,19 @@ var programm_explorer = function(fullscreen)
 					_icon.innerHTML = 'insert_drive_file';
 				}
 
-				// Add click event
-				_node.addEventListener('click', function()
-				{
-					selectThisData(this);
-				});
-
 			}).call(this, _data, allDatas);
 		}
+	}
+
+
+	/**
+	 *	Clear explorer path
+	 */
+	function clearShowPath()
+	{
+		// Remove input values
+		o.obj.explorer_input.value = '';
+		o.obj.explorer_path.innerHTML = '';
 	}
 
 
@@ -111,14 +138,33 @@ var programm_explorer = function(fullscreen)
 	 */
 	function showPath()
 	{
-		// Show display path
-		var path = class_storage.getSplitPath(class_storage.getCurrentRealPath());
+		var realPath = class_storage.getCurrentRealPath(o.currentPath),
+			splitPath = class_storage.getSplitPath(realPath),
+			stringPath = '';
 
-		for(var i in path)
+		// Clear path
+		clearShowPath();
+
+		// Print hidden input field
+		o.obj.explorer_input.value = realPath;
+
+		for(var i in splitPath)
 		{
+			stringPath += '/' + splitPath[i];
+
 			var li = document.createElement('li');
 			li.className = 'explorer__pathitem';
-			li.innerHTML = path[i];
+			li.innerHTML = splitPath[i];
+			li.path = stringPath;
+			li.onclick = function()
+			{
+				// Save new path
+				o.currentPath = this.path;
+
+				// Show new content
+				showContent();
+				showPath();
+			}
 			o.obj.explorer_path.appendChild(li);
 
 			var icon = document.createElement('i');
