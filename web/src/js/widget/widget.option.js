@@ -34,8 +34,13 @@
 					"type": "dir",
 					"childs": []
 				}, {
-					"name": "dir",
-					"id": "dir",
+					"name": "etc",
+					"id": "etc",
+					"type": "dir",
+					"childs": []
+				}, {
+					"name": "var",
+					"id": "var",
 					"type": "dir",
 					"childs": []
 				}]

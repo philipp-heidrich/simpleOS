@@ -57,8 +57,8 @@
 		class_storage.createDir('/home/' + id + '/Own downloads');
 
 		// Create new files
-		class_storage.createFile('/home/' + id, '.bash_history', '');
-		class_storage.createFile('/home/' + id, 'test', '');
+		class_storage.createFile('/home/' + id, '.bash_history', null, null);
+		class_storage.createFile('/home/' + id, 'test', null);
 
 		return true;
 	}

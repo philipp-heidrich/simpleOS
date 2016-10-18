@@ -82,7 +82,7 @@ var programm_explorer = function(fullscreen)
 					if(this.explorer.type == 'dir')
 					{
 						// Save new path
-						o.currentPath = o.currentPath + '/' + this.explorer.name;
+						o.currentPath += (o.currentPath == '/') ? this.explorer.name : '/' + this.explorer.name;
 
 						// Show new content
 						showContent();
@@ -97,6 +97,15 @@ var programm_explorer = function(fullscreen)
 
 				// Print name
 				_obj_name.innerHTML = _content.name;
+
+				// Print kind of file
+				if(
+					_content.type == 'file' &&
+					_content.kind
+				)
+				{
+					_obj_name.innerHTML += '.' + _content.kind;
+				}
 
 				// Create icon
 				var _icon = document.createElement('i');
@@ -146,8 +155,13 @@ var programm_explorer = function(fullscreen)
 		}
 		o.obj.explorer_path.appendChild(li);
 
+		var home = document.createElement('i');
+		home.innerHTML = 'home';
+		home.className = 'explorer__pathhome material-icons';
+		li.appendChild(home);
+
 		var icon = document.createElement('i');
-		icon.innerHTML = 'home';
+		icon.innerHTML = 'keyboard_arrow_right';
 		icon.className = 'explorer__pathicon material-icons';
 		li.appendChild(icon);
 	}
