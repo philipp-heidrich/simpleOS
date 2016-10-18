@@ -15,7 +15,7 @@
 		height: 100%;
 		background-size: cover;
 		background-position: center;
-		/*background-color: var(--color-main);
-		background-image: url(../gfx/background/bg_01.jpg);*/
+		background-color: var(--color-main);
+		background-image: url(../gfx/background/bg_01.jpg);
 	}
 }
