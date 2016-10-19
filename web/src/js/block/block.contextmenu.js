@@ -57,18 +57,35 @@
 	 */
 	function checkValidMenu(position, clickObj)
 	{
+		var newOutputArray = [];
+
 		if(contextmenu.isUsed) contextmenu.close();
 
 		// Check if this element found
 		for(var i in contextmenu.array)
 		{
-			var _insertMenu = contextmenu.array[i];
+			var _insertMenu = contextmenu.array[i],
+				allFoundElem = document.querySelectorAll(_insertMenu.obj);
 
-			if(document.querySelector(_insertMenu.obj) == clickObj)
+			if(_insertMenu.beCorrent())
 			{
-				createContextElm(position);
-				break;
+				for(var e = 0; e < allFoundElem.length; e++)
+				{
+					if(
+						_insertMenu.findParent && hasParent(_insertMenu.obj, clickObj) ||
+						allFoundElem[e] == clickObj
+					)
+					{
+						newOutputArray.push(_insertMenu);
+						break;
+					}
+				}
 			}
+		}
+
+		if(newOutputArray.length)
+		{
+			createContextElm(position, newOutputArray);
 		}
 	}
 
@@ -76,7 +93,7 @@
 	/**
 	 *	Create contextmenu element
 	 */
-	function createContextElm(position)
+	function createContextElm(position, newOutputArray)
 	{
 		// Set used variable to true
 		contextmenu.isUsed = true;
@@ -90,9 +107,9 @@
 		contextmenu.cm_layer.appendChild(contextmenu.cm_list);
 
 		// Create list element
-		for(var _insert in contextmenu.array)
+		for(var _insert in newOutputArray)
 		{
-			var insertObj = contextmenu.array[_insert];
+			var insertObj = newOutputArray[_insert];
 
 			if(
 				insertObj.childs &&
@@ -131,7 +148,8 @@
 			{
 				this.onclick = function()
 				{
-					explorer.disabledNewDataClick = true;
+					explorer.disabledRemoveSelection = true;
+					explorer.disabledRenameTmpl = true;
 					program.disableClickEvent = true;
 
 					// Run callback

@@ -9,14 +9,34 @@
 	/**
 	 *	Add desktop contextmenu to block.contextmenu.js
 	 */
+	// contextmenu.insert({
+	// 	obj: '.explorer__show',
+	// 	childs: [{
+	// 		value: 'Create new folder',
+	// 		icon: 'folder',
+	// 		click: function()
+	// 		{
+	// 			explorer.createDirLayer();
+	// 		}
+	// 	}]
+	// });
+
+	/**
+	 *	Add explorer dir contextmenu to block.contextmenu.js
+	 */
 	contextmenu.insert({
-		obj: '.explorer__show',
+		obj: '.explorer__data',
+		findParent: true,
+		beCorrent: function()
+		{
+			return explorer.isSelected;
+		},
 		childs: [{
-			value: 'Create new folder',
+			value: 'Rename',
 			icon: 'folder',
 			click: function()
 			{
-				explorer.createDirLayer();
+				explorer.showRename();
 			}
 		}]
 	});
@@ -34,30 +54,30 @@
 	/**
  	 *	Create new dir @TODO
  	 */
- // 	explorer.createDirLayer = function()
- // 	{
-	// 	if(program.selected)
-	// 	{
-	// 		var explorerWindow = program.list[program.selected];
-	//
-	// 		if(
-	// 			explorerWindow.id_program &&
-	// 			explorerWindow.id_program == 'explorer' &&
-	// 			!explorer.isNewData
-	// 		)
-	// 		{
-	// 			var obj_content = explorerWindow.content,
-	// 				obj_show = obj_content.querySelector('.explorer__show');
-	//
-	// 			var node = explorer.createData(null, 'dir');
-	// 			obj_show.appendChild(node);
-	//
-	// 			return true;
-	// 		}
-	// 	}
-	//
-	// 	return false;
- // 	}
+ 	explorer.createDirLayer = function()
+ 	{
+		if(program.selected)
+		{
+			var explorerWindow = program.list[program.selected];
+
+			if(
+				explorerWindow.id_program &&
+				explorerWindow.id_program == 'explorer' &&
+				!explorer.isNewData
+			)
+			{
+				var obj_content = explorerWindow.content,
+					obj_show = obj_content.querySelector('.explorer__show');
+
+				var node = explorer.createData(null, 'dir');
+				obj_show.appendChild(node);
+
+				return true;
+			}
+		}
+
+		return false;
+ 	}
 
 
 	/**
@@ -144,7 +164,8 @@
 			var obj = explorer.isSelected.obj_node;
 
 			obj.className = obj.className.replace(' explorer__data--selected', '');
-			obj = false;
+
+			explorer.isSelected = false;
 		}
 	}
 
@@ -254,6 +275,168 @@
 	}
 
 
+	/**
+	 *	Show explorer path
+	 */
+	explorer.showPath = function()
+	{
+		var windowObj = program.getSelectedWindow();
+		if(windowObj)
+		{
+			var o = windowObj._program,
+				realPath = class_storage.getCurrentRealPath(o.currentPath),
+				splitPath = class_storage.getSplitPath(realPath),
+				stringPath = '';
+
+			// Clear path
+			explorer.clearShowPath();
+
+			// Print hidden input field
+			o.obj.explorer_input.value = realPath;
+
+			for(var i in splitPath)
+			{
+				stringPath += '/' + splitPath[i];
+
+				var li = document.createElement('li');
+				li.className = 'explorer__pathitem';
+				li.innerHTML = splitPath[i];
+				li.path = stringPath;
+				o.obj.explorer_path.appendChild(li);
+
+				// Add event
+				if(i < splitPath.length)
+				{
+					li.onclick = function()
+					{
+						program.disableClickEvent = true;
+
+						// Save new path
+						o.currentPath = this.path;
+
+						// Show new content
+						explorer.showContent();
+						explorer.showPath();
+					}
+				}
+
+				var icon = document.createElement('i');
+				icon.innerHTML = 'keyboard_arrow_right';
+				icon.className = 'explorer__pathicon material-icons';
+				li.appendChild(icon);
+			}
+		}
+	}
+
+
+	/**
+	 *	Clear explorer path
+	 */
+	explorer.clearShowPath = function()
+	{
+		var windowObj = program.getSelectedWindow();
+		if(windowObj)
+		{
+			var o = windowObj._program;
+
+			// Remove input values
+			o.obj.explorer_input.value = '';
+			o.obj.explorer_path.innerHTML = '';
+
+			// Create home dir
+			var li = document.createElement('li');
+			li.className = 'explorer__pathitem';
+			li.path = '/';
+			li.onclick = function()
+			{
+				// Save new path
+				o.currentPath = this.path;
+
+				// Show new content
+				explorer.showContent();
+				explorer.showPath();
+			}
+			o.obj.explorer_path.appendChild(li);
+
+			var home = document.createElement('i');
+			home.innerHTML = 'home';
+			home.className = 'explorer__pathhome material-icons';
+			li.appendChild(home);
+
+			var icon = document.createElement('i');
+			icon.innerHTML = 'keyboard_arrow_right';
+			icon.className = 'explorer__pathicon material-icons';
+			li.appendChild(icon);
+		}
+	}
+
+
+	/**
+	 *	Show current content
+	 */
+	explorer.showContent = function()
+	{
+		var windowObj = program.getSelectedWindow();
+		if(windowObj)
+		{
+			var o = windowObj._program;
+
+			// Clear content
+			explorer.clearContent();
+
+			// Get datas
+			var allDatas = class_storage.showAll(o.currentPath);
+
+			// Sort datas
+			allDatas = explorer.sortDatas(allDatas, 'ASC');
+
+			// Loop all files
+			for(var _data in allDatas)
+			{
+				(function(_data, allDatas)
+				{
+					var _content = allDatas[_data];
+					var dataObj = explorer.createData(_content);
+					dataObj.obj_node.ondblclick = function()
+					{
+						(function()
+						{
+							if(this.type == 'dir')
+							{
+								// Save new path
+								o.currentPath += (o.currentPath == '/') ? this.name : '/' + this.name;
+
+								// Show new content
+								explorer.showContent();
+								explorer.showPath();
+							}
+						}).call(_content);
+					};
+
+					o.obj.explorer_show.appendChild(dataObj.obj_node);
+
+				}).call(null, _data, allDatas);
+			}
+		}
+	}
+
+
+	/**
+	 *	Clear show content
+	 */
+	explorer.clearContent = function()
+	{
+		var windowObj = program.getSelectedWindow();
+		if(windowObj)
+		{
+			var o = windowObj._program;
+			o.obj.explorer_show.innerHTML = '';
+		}
+	}
+
+
+
+
 
 
 
@@ -264,27 +447,38 @@
 	 */
 
 	document.addEventListener('click', function(event)
-	{
-		// Remove selection
-		if(
-			explorer.isSelected &&
-			!hasParent('.explorer__data', event.target)
-		)
-		{
-			explorer.removeThisData();
-		}
+ 	{
+ 		// Remove and save new rename
+ 		if(
+ 			explorer.isSelected &&
+ 			explorer.isRename &&
+ 			!hasParent('.explorer__data--rename', event.target)
+ 		)
+ 		{
+ 			if(!explorer.disabledRenameTmpl)
+ 			{
+				explorer.saveNewPath();
+				explorer.hideRename();
+				explorer.showContent();
+ 			}
 
-		// Remove rename
-		if(
-			explorer.isSelected &&
-			explorer.isRename &&
-			!hasParent('.explorer__data--rename', event.target)
-		)
-		{
-			explorer.saveNewPath();
-			explorer.hideRename();
-		}
-	});
+ 			explorer.disabledRenameTmpl = false;
+ 		}
+
+		// Remove selection
+ 		else if(
+ 			explorer.isSelected &&
+ 			!hasParent('.explorer__data', event.target)
+ 		)
+ 		{
+ 			if(!explorer.disabledRemoveSelection)
+ 			{
+ 				explorer.removeThisData();
+ 			}
+
+ 			explorer.disabledRemoveSelection = false;
+ 		}
+ 	});
 
 	document.addEventListener('keydown', function(event)
 	{
@@ -324,6 +518,7 @@
 				{
 					explorer.saveNewPath();
 					explorer.hideRename();
+					explorer.showContent();
 
 					event.preventDefault();
 				}
@@ -347,7 +542,7 @@ var programm_explorer = function(fullscreen)
 	var o = {};
 
 	// Create window
-	o.progObj = program.startWindow('explorer', 'Explorer', fullscreen);
+	o.progObj = program.startWindow(o, 'explorer', 'Explorer', fullscreen);
 
 	// Insert explorer object
 	o.progObj.layer.explorer = o;
@@ -364,144 +559,6 @@ var programm_explorer = function(fullscreen)
 	o.currentPath = '~';
 
 	// Show current content
-	showContent();
-	showPath();
-
-
-
-	/**
-	 *
-	 *	Private functions
-	 *
-	 **/
-
-	/**
-	 *	Clear show content
-	 */
-	function clearContent()
-	{
-		o.obj.explorer_show.innerHTML = '';
-	}
-
-
-	/**
-	 *	Show current content
-	 */
-	function showContent()
-	{
-		// Clear content
-		clearContent();
-
-		// Get datas
-		var allDatas = class_storage.showAll(o.currentPath);
-
-		// Sort datas
-		allDatas = explorer.sortDatas(allDatas, 'ASC');
-
-		// Loop all files
-		for(var _data in allDatas)
-		{
-			(function(_data, allDatas)
-			{
-				var _content = allDatas[_data];
-				var dataObj = explorer.createData(_content);
-				dataObj.obj_node.ondblclick = function()
-				{
-					(function(o)
-					{
-						if(this.type == 'dir')
-						{
-							// Save new path
-							o.currentPath += (o.currentPath == '/') ? this.name : '/' + this.name;
-
-							// Show new content
-							showContent();
-							showPath();
-						}
-					}).call(_content, o);
-				};
-
-				o.obj.explorer_show.appendChild(dataObj.obj_node);
-
-			}).call(null, _data, allDatas);
-		}
-	}
-
-
-	/**
-	 *	Clear explorer path
-	 */
-	function clearShowPath()
-	{
-		// Remove input values
-		o.obj.explorer_input.value = '';
-		o.obj.explorer_path.innerHTML = '';
-
-		// Create home dir
-		var li = document.createElement('li');
-		li.className = 'explorer__pathitem';
-		li.path = '/';
-		li.onclick = function()
-		{
-			// Save new path
-			o.currentPath = this.path;
-
-			// Show new content
-			showContent();
-			showPath();
-		}
-		o.obj.explorer_path.appendChild(li);
-
-		var home = document.createElement('i');
-		home.innerHTML = 'home';
-		home.className = 'explorer__pathhome material-icons';
-		li.appendChild(home);
-
-		var icon = document.createElement('i');
-		icon.innerHTML = 'keyboard_arrow_right';
-		icon.className = 'explorer__pathicon material-icons';
-		li.appendChild(icon);
-	}
-
-
-	/**
-	 *	Show explorer path
-	 */
-	function showPath()
-	{
-		var realPath = class_storage.getCurrentRealPath(o.currentPath),
-			splitPath = class_storage.getSplitPath(realPath),
-			stringPath = '';
-
-		// Clear path
-		clearShowPath();
-
-		// Print hidden input field
-		o.obj.explorer_input.value = realPath;
-
-		for(var i in splitPath)
-		{
-			stringPath += '/' + splitPath[i];
-
-			var li = document.createElement('li');
-			li.className = 'explorer__pathitem';
-			li.innerHTML = splitPath[i];
-			li.path = stringPath;
-			li.onclick = function()
-			{
-				// Save new path
-				o.currentPath = this.path;
-
-				// Show new content
-				showContent();
-				showPath();
-			}
-			o.obj.explorer_path.appendChild(li);
-
-			var icon = document.createElement('i');
-			icon.innerHTML = 'keyboard_arrow_right';
-			icon.className = 'explorer__pathicon material-icons';
-			li.appendChild(icon);
-		}
-	}
+	explorer.showContent();
+	explorer.showPath();
 };

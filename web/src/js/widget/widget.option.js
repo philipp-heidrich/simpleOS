@@ -32,6 +32,7 @@
 					"name": "home",
 					"id": "home",
 					"type": "dir",
+					"disableEdit": true,
 					"childs": []
 				}, {
 					"name": "etc",

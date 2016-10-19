@@ -50,15 +50,15 @@
 		option.save('account_users', allAccounts);
 
 		// Create new dirs
-		class_storage.createDir('/home/' + id);
-		class_storage.createDir('/home/' + id + '/Desktop');
-		class_storage.createDir('/home/' + id + '/Own images');
-		class_storage.createDir('/home/' + id + '/Own documents');
-		class_storage.createDir('/home/' + id + '/Own downloads');
+		class_storage.createDir('/home/' + id, true);
+		class_storage.createDir('/home/' + id + '/Desktop', true);
+		class_storage.createDir('/home/' + id + '/Own images', true);
+		class_storage.createDir('/home/' + id + '/Own documents', true);
+		class_storage.createDir('/home/' + id + '/Own downloads', true);
 
 		// Create new files
-		class_storage.createFile('/home/' + id, '.bash_history', null, null);
-		class_storage.createFile('/home/' + id, 'test', null);
+		class_storage.createFile('/home/' + id, '.bash_history');
+		class_storage.createFile('/home/' + id, 'test');
 
 		return true;
 	}

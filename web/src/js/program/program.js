@@ -47,9 +47,11 @@
 	/**
 	 *	Start program
 	 */
-	program.startWindow = function(id, title, fullscreen)
+	program.startWindow = function(programObj, id, title, fullscreen)
 	{
-		var o = {};
+		var o = {
+			_program: programObj
+		};
 
 		// Set new id
 		program.idCounter++;
@@ -438,7 +440,6 @@
 	 */
 	function createWindow(o)
 	{
-
 		var tmpl = document.querySelector('#hiddenTemplate [program="' + o.id_program + '"]');
 
 		o.layer = document.createElement('div');
@@ -560,11 +561,7 @@
 		// Global click event
 		document.addEventListener('click', function(event)
 		{
-			if(program.disableClickEvent)
-			{
-				program.disableClickEvent = false;
-			}
-			else
+			if(!program.disableClickEvent)
 			{
 				var parentProgram = hasParent('.window', event.target, true);
 
@@ -588,6 +585,8 @@
 					program.setSelection(parentProgram.program_id);
 				}
 			}
+
+			program.disableClickEvent = false;
 		});
 
 

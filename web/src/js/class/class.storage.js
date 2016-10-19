@@ -6,7 +6,7 @@
 
 
 	// New file object
-	var newFile = function(id, file, kind, content)
+	var newFile = function(id, file, kind, content, disableEdit)
 	{
 		var file = {
 			'id': id,
@@ -18,8 +18,29 @@
 		if(kind)
 			file.kind = kind;
 
+		if(disableEdit)
+			file.disableEdit = disableEdit;
+
 		// Return the new file
 		return file;
+	}
+
+
+	// New dir object
+	var newDir = function(id, name, disableEdit)
+	{
+		var dir = {
+			'name': name,
+			'id': id,
+			'type': 'dir',
+			'childs': []
+		}
+
+		if(disableEdit)
+			dir.disableEdit = disableEdit;
+
+		// Return the new file
+		return dir;
 	}
 
 
@@ -74,7 +95,7 @@
 	/**
 	 *	Create a dir - mkdir
 	 */
-	class_storage.createDir = function(path)
+	class_storage.createDir = function(path, disableEdit)
 	{
 		var path 		= class_storage.getSplitPath(path),
 			name 		= path.pop(),
@@ -123,13 +144,8 @@
 
 			if(!foundItem)
 			{
-				// Create new dir
-				foundPath.push({
-					'name': name,
-					'id': id,
-					'type': 'dir',
-					'childs': []
-				});
+				// Push this in the filesystem
+				foundPath.push(new newDir(id, name, disableEdit));
 
 				// Save filesystem
 				saveFileSystem();
@@ -145,7 +161,7 @@
 	/**
 	 *	Create new file
 	 */
-	class_storage.createFile = function(path, file, kind, content)
+	class_storage.createFile = function(path, file, kind, content, disableEdit)
 	{
 		var splitPath 	= class_storage.getSplitPath(path),
 			dirObj 		= getDir(splitPath),
@@ -171,7 +187,7 @@
 			if(!foundItem)
 			{
 				// Push this in the filesystem
-				dirObj.push(new newFile(id, file, kind, content));
+				dirObj.push(new newFile(id, file, kind, content, disableEdit));
 
 				// Save filesystem
 				saveFileSystem();
@@ -210,7 +226,10 @@
 			}
 
 			// Have found this
-			if(foundDir)
+			if(
+				foundDir &&
+				!foundDir.disableEdit
+			)
 			{
 				foundDir.name = name;
 				foundDir.id = convertNameToId(name);

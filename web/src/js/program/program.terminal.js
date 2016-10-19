@@ -8,7 +8,7 @@ var program_terminal = function(fullscreen)
 	};
 
 	// Create window
-	o.progObj = program.startWindow('terminal', 'Terminal', fullscreen);
+	o.progObj = program.startWindow(o, 'terminal', 'Terminal', fullscreen);
 
 	// Create terminal object
 	o.obj = {

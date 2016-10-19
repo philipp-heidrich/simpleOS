@@ -18,8 +18,8 @@
 		background-repeat: no-repeat;
 		background-size: cover;
 		background-color: #eee;
-		background-color: var(--color-main);
-		background-image: url(../gfx/background/bg_01.jpg);
+		/*background-color: var(--color-main);
+		background-image: url(../gfx/background/bg_01.jpg);*/
 	}
 
 	& .login__box {
