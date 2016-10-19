@@ -17,8 +17,8 @@ function hasParent(parent, child, returnParent)
 		return false;
 	}
 
-	var node = child.parentNode,
-		parents = (typeof parent == 'string') ? document.querySelectorAll(parent) : parent;
+	var parents 	= (typeof parent == 'string') ? document.querySelectorAll(parent) : parent,
+		node 		= child;
 
 	while(node != null)
 	{

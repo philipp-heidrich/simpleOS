@@ -9,11 +9,11 @@
 <link href="https://fonts.gstatic.com" rel="dns-prefetch">
 <link href="https://fonts.gstatic.com" rel="preconnect">
 
-<link href="css/app.css?1476811551567" rel="stylesheet">
+<link href="css/app.css?1476899441767" rel="stylesheet">
 <link href='https://cdn.jsdelivr.net/font-hack/2.020/css/hack.min.css' rel='stylesheet'>
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
 
-<script type="text/javascript" src="js/app.js?1476811551567"></script>
+<script type="text/javascript" src="js/app.js?1476899441767"></script>
 
 	</head>
 	<body>
@@ -36,7 +36,7 @@
 		<li>
 			A simple operating system build in native javascript<br>
 			<br>
-			Version: 0.0.5<br>
+			Version: 0.0.6<br>
 			Author: Philipp Heidrich &lt;phi.heidrich@gmail.com&gt;
 		</li>
 
@@ -153,9 +153,8 @@
 
 			<!-- HTML: Desktop -->
 			<div class="desktop content">
-	<div class="desktop__background"></div>
-
-	<div class="desktop__programs"></div>
+	<!-- Windows -->
+	<div class="desktop__windows"></div>
 
 	<!-- Taskline -->
 	<div class="taskline">
@@ -208,7 +207,7 @@
 		</div>
 
 		<!-- Hidden Programs -->
-		<div id="programs">
+		<div id="hiddenTemplate">
 
 			<!-- HTML: Terminal -->
 			<div program="terminal">
@@ -252,14 +251,16 @@
 	<!-- Show block -->
 	<div class="explorer__show"></div>
 
-	<!-- Hidden block -->
-	<div class="explorer__templ">
+</div>
 
-		<!-- Data template -->
-		<div class="explorer__data">
-			<div class="explorer__icon"></div>
-			<div class="explorer__dataName"></div>
-		</div>
+<!-- Data template -->
+<div class="explorer__data">
+	<div class="explorer__icon"></div>
+	<div class="explorer__dataName"></div>
+
+	<!-- Rename input field -->
+	<div class="explorer__rename">
+		<input type="text" class="explorer__renameinput">
 	</div>
 </div>
 

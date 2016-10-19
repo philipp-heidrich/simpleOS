@@ -102,6 +102,14 @@
 		display: none;
 	}
 
+	& .explorer__newData {
+		width: 100px;
+		height: 100px;
+		margin: 3px;
+		float: left;
+		background: red;
+	}
+
 	& .explorer__data {
 		width: 100px;
 		height: 100px;
@@ -116,11 +124,17 @@
 		}
 
 		&.explorer__dir {
-			color: #c9cc82;
+			color: var(--color-folder);
 		}
 
 		&.explorer__file {
 			color: #ccc;
+		}
+
+		&.explorer__data--rename {
+			& .explorer__rename {
+				display: block;
+			}
 		}
 	}
 
@@ -152,5 +166,21 @@
 		overflow: hidden;
 		font-size: .8rem;
 		color: #888;
+	}
+
+	& .explorer__rename {
+		position: absolute;
+		display: none;
+		right: 2px;
+		left: 2px;
+		bottom: 2px;
+	}
+
+	& .explorer__renameinput {
+		border: 1px solid #ccc;
+		width: 100%;
+		padding: 3px;
+		text-align: center;
+		max-width: none;
 	}
 }

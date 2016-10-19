@@ -185,6 +185,48 @@
 
 
 	/**
+	 *	Rename dir
+	 */
+	class_storage.renameDir = function(path, oldName, name)
+	{
+		var splitPath = class_storage.getSplitPath(path),
+			dirObj = getDir(splitPath);
+
+		if(dirObj)
+		{
+			var foundDir = false;
+
+			// Check found this dir
+			for(var i in dirObj)
+			{
+				var _dir = dirObj[i],
+					oldId = convertNameToId(oldName);
+
+				if(_dir.id == oldId)
+				{
+					foundDir = _dir;
+					break;
+				}
+			}
+
+			// Have found this
+			if(foundDir)
+			{
+				foundDir.name = name;
+				foundDir.id = convertNameToId(name);
+
+				// Save filesystem
+				saveFileSystem();
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+
+	/**
 	 *	Append content to file
 	 */
 	class_storage.appendContent = function(path, content)

@@ -40,7 +40,7 @@
 	 *
 	 */
 
-	 /**
+	/**
  	 *	Start login boot
  	 */
  	desktop.boot = function()
@@ -53,11 +53,13 @@
  		desktop.obj = {
  			wrapper: document.querySelector('#wrapper'),
  			content: document.querySelector('.desktop'),
-			program: document.querySelector('.desktop .desktop__programs')
+			program: document.querySelector('.desktop .desktop__windows')
  		}
 
 		boot.printBootMessage('<br>');
  	}
+
+
 
 
 
