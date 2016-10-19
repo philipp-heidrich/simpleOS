@@ -1,0 +1,38 @@
+.contextmenu {
+	position: fixed;
+	background: #f9f9f9;
+	border: 1px solid #e8e8e8;
+	padding: 5px;
+	box-shadow: 0 1px 30px rgba(0,0,0, .1);
+	border-radius: 2px;
+
+	& .contextmenu__point {
+		position: relative;
+		min-width: 140px;
+		transition: .3s var(--transition-art);
+
+		&:hover {
+			background-color: #ececec;
+		}
+	}
+
+	& .contextmenu__icon {
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 30px;
+		line-height: 30px;
+		font-size: 20px;
+
+		&.contextmenu__icon--folder {
+			color: var(--color-folder);
+		}
+	}
+
+	& .contextmenu__value {
+		padding: 0 10px 0 35px;
+		line-height: 30px;
+		color: #636363;
+		white-space: nowrap;
+	}
+}
