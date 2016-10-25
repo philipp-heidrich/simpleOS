@@ -1,4 +1,5 @@
 # webOS
+webOS is a simple operating system build in native javascript, css, html.
 
 ### Demo
 [https://philipp-heidrich.github.io/webOS/](https://philipp-heidrich.github.io/webOS/)
